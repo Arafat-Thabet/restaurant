@@ -318,11 +318,11 @@ class MyDiners extends MY_Controller
                  * Directory online --> /home/diner/public_html/sa/Mail
                  */
                 // $this->load->library('personalizedmailer');
-                $this->load->library('personalizedmailer', array(
+              /*  $this->load->library('personalizedmailer', array(
                     'pmdatadir' => BASEPATH,
                     'domain' => 'sufrati.com',
                     'silent' => TRUE
-                ));
+                ));*/
             /*    $this->personalizedmailer->initqueue(array(
                     'addresses' => $emaillist,
                     'msgtemplate' => $newsLetterMsg,
