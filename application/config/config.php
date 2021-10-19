@@ -24,7 +24,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 $config['base_url'] = 'https://stage.azooma.co/restaurant/';
-
+$config['sa_url']	= 'https://stage.azooma.co/restaurant/';
+$config['upload_url']	= '../uploads/';
 /*
 |--------------------------------------------------------------------------
 | Index File
