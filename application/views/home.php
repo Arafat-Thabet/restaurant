@@ -1,0 +1,602 @@
+<script src="<?= base_url(js_path()) ?>high-charts/high-charts.js"></script>
+<?php
+echo message_box('error');
+echo message_box('success');
+?>
+<div class="container-fluid">
+
+  <div class="row pt-2">
+
+    <div class="col-12">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><?= lang('home') ?></li>
+      </ol>
+    </div>
+  </div>
+
+</div>
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+      <div class="card o-hidden">
+        <div class="bg-primary b-r-4 card-body">
+          <div class="media static-top-widget">
+            <div class="align-self-center text-center"><i data-feather="thumbs-up"></i></div>
+            <div class="media-body"><span class="m-0"><?= lang('liked_by') ?></span>
+              <h4 class="mb-0 counter"><?= $like_by ?></h4><i class="icon-bg" data-feather="thumbs-up"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+      <div class="card o-hidden">
+        <div class="bg-secondary b-r-4 card-body">
+          <div class="media static-top-widget">
+            <div class="align-self-center text-center"><i data-feather="message-circle"></i></div>
+            <div class="media-body"><span class="m-0"><?= lang('comments') ?></span>
+              <h4 class="mb-0 counter"><?= $total_comments ?></h4><i class="icon-bg" data-feather="message-circle"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+      <div class="card o-hidden">
+        <div class="bg-primary b-r-4 card-body">
+          <div class="media static-top-widget">
+            <div class="align-self-center text-center"><i data-feather="twitter"></i></div>
+            <div class="media-body"><span class="m-0"><?= lang('followers') ?></span>
+              <h4 class="mb-0 counter"><?php echo $favourite; ?></h4><i class="icon-bg" data-feather="twitter"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-xl-3 col-lg-6">
+      <div class="card o-hidden">
+        <div class="bg-primary b-r-4 card-body">
+          <div class="media static-top-widget">
+            <div class="align-self-center text-center"><i data-feather="users"></i></div>
+            <div class="media-body"><span class="m-0"><?= lang('diners') ?></span>
+              <h4 class="mb-0 counter"><?= $total_diners ?></h4><i class="icon-bg" data-feather="users"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-6 xl-100 box-col-12">
+      <div class="widget-joins card widget-arrow">
+        <div class="row">
+          <div class="col-sm-6 pe-0">
+            <div class="media border-after-xs">
+              <div class="align-self-center me-3 text-start"><span class="mb-1"><?= lang('liked_by') ?></span>
+                <h5 class="mb-0"><?= lang('this_month') ?></h5>
+              </div>
+              <div class="media-body align-self-center"><i class="font-primary" data-feather="arrow-down"></i></div>
+              <div class="media-body">
+                <h5 class="mb-0"><span class="counter">25698</span></h5><span class="mb-1">-2658(36%)</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 ps-0">
+            <div class="media">
+              <div class="align-self-center me-3 text-start"><span class="mb-1"><?= lang('liked_by') ?></span>
+                <h5 class="mb-0"><?= lang('last_month') ?></h5>
+              </div>
+              <div class="media-body align-self-center"><i class="font-primary" data-feather="arrow-up"></i></div>
+              <div class="media-body ps-2">
+                <h5 class="mb-0"><span class="counter">6954</span></h5><span class="mb-1">+369(15%)</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <hr>
+          </div>
+          <div class="col-sm-6 pe-0">
+            <div class="media border-after-xs">
+              <div class="align-self-center me-3 text-start"><span class="mb-1"><?= lang('followers') ?></span>
+                <h5 class="mb-0"><?= lang('this_month') ?></h5>
+              </div>
+              <div class="media-body align-self-center"><i class="font-primary" data-feather="arrow-up"></i></div>
+              <div class="media-body">
+                <h5 class="mb-0"><span class="counter">63147</span></h5><span class="mb-1">+69(65%)</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 ps-0">
+            <div class="media">
+              <div class="align-self-center me-3 text-start"><span class="mb-1"><?= lang('followers') ?></span>
+                <h5 class="mb-0"><?= lang('last_month') ?></h5>
+              </div>
+              <div class="media-body align-self-center ps-3"><i class="font-primary" data-feather="arrow-up"></i></div>
+              <div class="media-body ps-2">
+                <h5 class="mb-0"><span class="counter">963198</span></h5><span class="mb-1">+3654(90%) </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12">
+            <hr>
+          </div>
+          <div class="col-sm-6 pe-0">
+            <div class="media border-after-xs">
+              <div class="align-self-center me-3 text-start"><span class="mb-1"><?=lang('Vistors')?></span>
+                <h5 class="mb-0"><?= lang('this_month') ?></h5>
+              </div>
+              <div class="media-body align-self-center"><i class="font-primary" data-feather="arrow-down"></i></div>
+              <div class="media-body">
+                <h5 class="mb-0"><span class="counter">25698</span></h5><span class="mb-1">-2658(36%)</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 ps-0">
+            <div class="media">
+              <div class="align-self-center me-3 text-start"><span class="mb-1"><?=lang('Vistors')?></span>
+                <h5 class="mb-0"><?= lang('last_month') ?></h5>
+              </div>
+              <div class="media-body align-self-center"><i class="font-primary" data-feather="arrow-up"></i></div>
+              <div class="media-body ps-2">
+                <h5 class="mb-0"><span class="counter">6954</span></h5><span class="mb-1">+369(15%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+
+    </div>
+
+    <div class="col-xl-7  col-lg-7 box-col-7">
+      <div class="card ">
+        <div class="card-body">
+          <h5 class="mx-3"><?=lang('Vistors')?></h5>
+
+          <div style="height:385px" id="vistors-chart"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-5 col-md-12 box-col-12">
+      <div class="card o-hidden">
+
+        <div class="bar-chart-widget">
+
+          <div class="bottom-content card-body">
+            <h5 class="mx-3"><?=lang('user_rating')?></h5>
+
+            <div class="row">
+              <div class="col-12">
+                <div id="chart-widget5"> </div>
+              </div>
+            </div>
+            <div class="row text-center">
+              <div class="col-4 b-r-light">
+                <div><span class="font-primary">12%<i class="icon-angle-up f-12 ms-1"></i></span><span class="text-muted block-bottom">Year</span>
+                  <h4 class="num m-0"><span class="counter color-bottom">3659</span></h4>
+                </div>
+              </div>
+              <div class="col-4 b-r-light">
+                <div><span class="font-primary">15%<i class="icon-angle-up f-12 ms-1"></i></span><span class="text-muted block-bottom">Month</span>
+                  <h4 class="num m-0"><span class="counter color-bottom">698</span></h4>
+                </div>
+              </div>
+              <div class="col-4">
+                <div><span class="font-primary">34%<i class="icon-angle-up f-12 ms-1"></i></span><span class="text-muted block-bottom">Today</span>
+                  <h4 class="num m-0"><span class="counter color-bottom">9361</span></h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-header card-no-border">
+          <h5 class="text-uppercase"><?=lang('recent_activity')?></h5>
+          <div class="card-header-right">
+            <ul class="list-unstyled card-option">
+              <li><i class="fa fa-spin fa-cog"></i></li>
+              <li><i class="view-html fa fa-code"></i></li>
+              <li><i class="icofont icofont-maximize full-card"></i></li>
+              <li><i class="icofont icofont-minus minimize-card"></i></li>
+              <li><i class="icofont icofont-refresh reload-card"></i></li>
+              <li><i class="icofont icofont-error close-card"></i></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body new-update pt-0">
+          <div class="activity-timeline">
+            <?php
+            $i = 1;
+            foreach ($activities as $p) { 
+              $class="activity-dot-secondary";
+              $icon='<i class="fa fa-circle circle-dot-secondary pull-right"></i>';
+              if ($i % 2 == 0) {
+                $class="activity-dot-secondary";
+                $icon='<i class="fa fa-circle circle-dot-secondary pull-right"></i>';
+                $icon='';
+              }
+              else{
+                $class="activity-dot-primary";
+                $icon='<i class="fa fa-circle circle-dot-primary pull-right"></i>';
+              
+
+              }
+              ?>
+              <div class="media">
+                <div class="activity-line"></div>
+                <div class="<?=$class?>"></div>
+                <div class="media-body"><span><?php echo $p['date_add']." ".$icon ?></span>
+                  <p class="font-roboto"><?php echo $p['activity']; ?></p>
+                </div>
+              </div>
+            <?php $i++; }
+            ?>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5 notification ">
+      <div class="card">
+        <div class="card-header card-no-border">
+          <div class="header-top">
+            <h5 class="text-uppercase m-0">notification</h5>
+            <div class="card-header-right-icon">
+              <div class="dropdown">
+                <button class="btn dropdown-toggle" id="dropdownMenuButton" type="button" data-bs-toggle="dropdown" aria-expanded="false">Today</button>
+                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton"><a class="dropdown-item" href="#">Today</a><a class="dropdown-item" href="#">Tomorrow</a><a class="dropdown-item" href="#">Yesterday </a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <div class="media">
+            <div class="media-body">
+              <p>20-04-2020 <span>10:10</span></p>
+              <h6>Updated Product<span class="dot-notification"></span></h6><span>Quisque a consequat ante sit amet magna...</span>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <p>20-04-2020<span class="ps-1">Today</span><span class="badge badge-secondary">New</span></p>
+              <h6>Tello just like your product<span class="dot-notification"></span></h6><span>Quisque a consequat ante sit amet magna... </span>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <p>20-04-2020 <span>10:10</span></p>
+              <h6> Product liked by<span class="dot-notification"></span></h6><span>Quisque a consequat ante sit amet magna...</span>
+            </div>
+          </div>
+          <div class="media">
+            <div class="media-body">
+              <div class="d-flex mb-3">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+    <div class="col-xl-6 xl-100 box-col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="text-uppercase"><?=lang('latest_rating')?></h5>
+          <div class="card-header-right">
+            <ul class="list-unstyled card-option">
+              <li><i class="fa fa-spin fa-cog"></i></li>
+              <li><i class="view-html fa fa-code"></i></li>
+              <li><i class="icofont icofont-maximize full-card"></i></li>
+              <li><i class="icofont icofont-minus minimize-card"></i></li>
+              <li><i class="icofont icofont-refresh reload-card"></i></li>
+              <li><i class="icofont icofont-error close-card"></i></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="user-status table-responsive">
+            <table class="table table-bordernone">
+              <thead class="text-center">
+                <tr>
+
+                  <th scope="col"><?=lang('id')?></th>
+                  <th><?=lang('user_name')?></th>
+                  <th scope="col"><?=lang('Food')?></th>
+                  <th scope="col"><?=lang('Service')?></th>
+                  <th scope="col"><?=lang('Atmosphere')?></th>
+                  <th scope="col"><?=lang('Value')?></th>
+                  <th scope="col"><?=lang('Presentation')?></th>
+                  <th scope="col"><?=lang('Variety')?></th>
+                  <th width="15%" scope="col"><?=lang('Total')?></th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <?php if (isset($getlates) and !empty($getlates)) { ?>
+                  <?php
+                  $i = 0;
+
+                  foreach ($getlates as $p) {
+                    $total=0;
+                    $i++;
+                  ?>
+                    <tr <?php if (isset($p['is_read'])) if ($p['is_read'] == 0) { ?> class="new-row" onclick="readRating('<?php echo $p['rating_ID'] ?>')" <?php } ?> data-row="<?php echo $p['rating_ID'] ?>">
+                      <td><?php echo $i; ?></td>
+                      <td><?php echo $this->MRestBranch->getUserName($p['user_ID']); ?></td>
+                      <td><?php $total+=$p['rating_Food']; echo $p['rating_Food']; ?></td>
+                      <td><?php $total+=$p['rating_Service']; echo $p['rating_Service']; ?></td>
+                      <td><?php $total+=$p['rating_Atmosphere'];  echo $p['rating_Atmosphere']; ?></td>
+                      <td><?php $total+=$p['rating_Value'];  echo $p['rating_Value']; ?></td>
+                      <td><?php $total+=$p['rating_Presentation']; echo $p['rating_Presentation']; ?></td>
+                      <td><?php $total+=$p['rating_Variety'];  echo $p['rating_Variety']; ?></td>
+                      <td>
+                        <?php $p_total=round(($total*10)/6,2);
+                        $class="bg-primary";
+                        if($p_total<=50)
+                        $class="bg-secondary";
+                        ?>
+                              <div class="progress-showcase">
+                              <?=$p_total?>%
+                                <div class="progress" style="height: 8px;">
+                                  <div class="progress-bar <?=$class?>" role="progressbar" style="width: <?=$p_total?>%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                              </div>
+                            </td>
+                    </tr>
+                  <?php } ?>
+                <?php } else { ?>
+                  <tr>
+                    <td colspan="8">&nbsp;&nbsp;<?=lang('no_rating_yet')?> </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 xl-100 box-col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="text-uppercase"><?=lang('latest_comments')?></h5>
+          <div class="card-header-right">
+            <ul class="list-unstyled card-option">
+              <li><i class="fa fa-spin fa-cog"></i></li>
+              <li><i class="view-html fa fa-code"></i></li>
+              <li><i class="icofont icofont-maximize full-card"></i></li>
+              <li><i class="icofont icofont-minus minimize-card"></i></li>
+              <li><i class="icofont icofont-refresh reload-card"></i></li>
+              <li><i class="icofont icofont-error close-card"></i></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="user-status table-responsive">
+            <table class="table table-bordernone">
+              <thead class="text-center">
+                <tr>
+                  <th><?=lang('id')?></th>
+                  <th><?=lang('user_name')?></th>
+                  <th><?=lang('comment')?></th>
+                  <th><?=lang('comment_date')?></th>
+                  <th width="105px"><?=lang('action')?></th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <?php if (isset($latestcomments) and !empty($latestcomments)) { ?>
+                  <?php
+                  $i = 0;
+                  foreach ($latestcomments as $p) {
+                    $i++;
+                  ?>
+                    <tr <?php if (isset($p['is_read'])) if ($p['is_read'] == 0) { ?> class="new-row" onclick="readcomment('<?php echo $p['review_ID'] ?>')" <?php } ?> data-row="<?php echo $p['review_ID'] ?>">
+                      <td <?php if (isset($p['review_Status'])) if ($p['review_Status'] == 0) echo 'class="strike"';  ?>><?php echo $i; ?></td>
+                      <td <?php if (isset($p['review_Status'])) if ($p['review_Status'] == 0) echo 'class="strike"';  ?>><?php echo $this->MRestBranch->getUserName($p['user_ID']); ?></td>
+                      <td <?php if (isset($p['review_Status'])) if ($p['review_Status'] == 0) echo 'class="strike"';  ?> width="350px"><?php echo substr($p['review_Msg'], 0, 50); ?></td>
+                      <td <?php if (isset($p['review_Status'])) if ($p['review_Status'] == 0) echo 'class="strike"';  ?>><?php echo date("Y-m-d", strtotime($p['review_Date'])); ?></td>
+                      <td>
+                        <a title="<?=lang('reply')?>" class="btn btn-sm my-1 btn-primary" href="<?php echo base_url(); ?>home/response/<?php echo $p['user_ID']; ?>/<?php echo $p['review_ID']; ?>"><i class="fa fa-reply"></i> </a>
+
+                        <a title="<?php echo $p['review_Status'] == 0 ? 'Publish' : 'Keep Private'; ?>" class="btn btn-sm my-1 btn-primary" href="<?php echo base_url('home/usercommentstatus?id=' . $p['review_ID']); ?>" rel="tooltip" data-original-title="<?php echo $p['review_Status'] == 0 ? 'Publish Comment' : 'Keep Private Comment'; ?>">
+                          <i <?php echo $p['review_Status'] == 0 ? 'class="fa fa-flag"' : 'class="fa fa-power-off"'; ?>> </i> 
+                        </a>
+                      </td>
+                    </tr>
+                  <?php } ?>
+                <?php } else { ?>
+                  <tr>
+                    <td colspan="8">&nbsp;&nbsp;<?=lang('no_comments_yet')?> </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-6 xl-100 box-col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="text-uppercase"><?=lang('latest_photo')?></h5>
+          <div class="card-header-right">
+            <ul class="list-unstyled card-option">
+              <li><i class="fa fa-spin fa-cog"></i></li>
+              <li><i class="view-html fa fa-code"></i></li>
+              <li><i class="icofont icofont-maximize full-card"></i></li>
+              <li><i class="icofont icofont-minus minimize-card"></i></li>
+              <li><i class="icofont icofont-refresh reload-card"></i></li>
+              <li><i class="icofont icofont-error close-card"></i></li>
+            </ul>
+          </div>
+        </div>
+        <div class="card-body">
+        <div class="table-responsive product-table">
+            <table class="table   table-bordernone">
+              <thead class="text-center">
+                <tr>
+                  <th><?=lang('id')?></th>
+                  <th><?=lang('img_preview')?></th>
+                  <th><?=lang('user_name')?></th>
+                  <th><?=lang('date')?></th>
+                  <th width="97px"><?=lang('action')?></th>
+                </tr>
+              </thead>
+              <tbody class="text-center">
+                <?php if (isset($latestUserUpload) and !empty($latestUserUpload)) { ?>
+                  <?php
+                  $i = 0;
+                  foreach ($latestUserUpload as $p) {
+                    $i++;
+                  ?>
+                    <tr <?php if (isset($p['is_read'])) if ($p['is_read'] == 0) { ?> class="new-row" onclick="readPhoto('<?php echo $p['image_ID'] ?>')" <?php } ?> data-row="<?php echo $p['image_ID'] ?>">
+                      <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>><?php echo $i; ?></td>
+                      <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>><img src="http://uploads.azooma.co/Gallery/thumb/<?php echo $p['image_full']; ?>" width="100" /></td>
+                      <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?> width="350px"><?php echo $this->MRestBranch->getUserName($p['user_ID']); ?></td>
+                      <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>> <?php echo date('jS M Y H:i:s', strtotime($p['enter_time'])); ?></td>
+                      <td>
+                        <a title="<?php echo $p['status'] == 0 ? 'Activate' : 'Deactivate'; ?>" <?php echo $p['status'] == 0 ? 'class="btn btn-sm btn-primary"' : 'class="btn btn-sm btn-danger"'; ?> href="<?php echo site_url('home/usergallerystatus?id=' . $p['image_ID']); ?>" rel="tooltip" data-original-title="<?php echo $p['status'] == 0 ? 'Activate the Image' : 'Deactivate the Image'; ?>">
+                          <i <?php echo $p['status'] == 0 ? 'class="fa fa-check"' : 'class="fa fa-ban"'; ?>> </i> 
+                        </a>
+                      </td>
+                    </tr>
+                  <?php } ?>
+                <?php } else { ?>
+                  <tr>
+                    <td colspan="8">&nbsp;&nbsp;<?=lang('no_photo_yet')?> </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<script src="<?= base_url(js_path()) ?>chart/apex-chart/moment.min.js"></script>
+<script src="<?= base_url(js_path()) ?>chart/apex-chart/apex-chart.js"></script>
+<script src="<?= base_url(js_path()) ?>owl.carousel.js"></script>
+<script src="<?= base_url(js_path()) ?>counter/jquery.waypoints.min.js"></script>
+<script src="<?= base_url(js_path()) ?>counter/jquery.counterup.min.js"></script>
+<script src="<?= base_url(js_path()) ?>counter/counter-custom.js"></script>
+<script src="<?= base_url(js_path()) ?>general-widget.js"></script>
+<?php
+$index = 0;
+$total = rand(1, 100);
+$month_data = [];
+for ($i = 1; $i <= 12; $i++) {
+  $where['MONTH(salary_date)'] = $i;
+
+  $vistors_data = []; //$this->db->select("sum(net_salary) as total,currency")->from("employees_salaries_archive")->where($where)->group_by("currency")->get()->result();
+  $total = rand(1, 100);
+
+  foreach ($vistors_data as $s) {
+    $total += $s->total;
+  }
+  $month_data[] = intval($total);
+}
+$vistors_data[$index]['lineColor'] = "#d55c46";
+$vistors_data[$index]['color'] = "#995144";
+$vistors_data[$index]['lineWidth'] = "5px";
+$vistors_data[$index]['name'] = "";
+$vistors_data[$index]['data'] = $month_data;
+$index++;
+
+$vistors = json_encode($vistors_data);
+?>
+<script>
+  function load_vistors_chart(vistors_data = [], chart_title = '') {
+    Highcharts.chart('vistors-chart', {
+      chart: {
+        type: 'line'
+      },
+      title: {
+        text: chart_title,
+      },
+
+      xAxis: {
+        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      },
+      yAxis: {
+        title: {
+          text: ''
+        }
+      },
+      plotOptions: {
+        line: {
+          dataLabels: {
+            enabled: true
+          },
+          enableMouseTracking: false
+        }
+      },
+      series: vistors_data
+    });
+  }
+  var vistors = <?= $vistors ?>;
+  load_vistors_chart(vistors, '');
+  // earning chart
+  var options = {
+    series: [70],
+    chart: {
+      height: 350,
+      type: 'radialBar',
+    },
+    plotOptions: {
+      radialBar: {
+        hollow: {
+          margin: 15,
+          size: '70%',
+          //  image: '<?= base_url("images/success.png") ?>',
+          imageWidth: 64,
+          imageHeight: 64,
+          imageClipped: false
+        },
+        dataLabels: {
+          name: {
+            show: false,
+            color: '#fff'
+          },
+          value: {
+            show: true,
+            color: '#333',
+            offsetY: 70,
+            fontSize: '22px'
+          }
+        }
+      }
+    },
+    fill: {
+      type: 'image',
+      image: {
+        src: ['<?= base_url("images/favicon_en.png") ?>'],
+      }
+    },
+    stroke: {
+      lineCap: 'round'
+    },
+    labels: ['Volatility'],
+  };
+
+  var chart = new ApexCharts(document.querySelector("#chart-widget5"), options);
+  chart.render();
+</script>
