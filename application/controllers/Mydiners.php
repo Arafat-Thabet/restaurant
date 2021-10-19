@@ -323,7 +323,7 @@ class MyDiners extends MY_Controller
                     'domain' => 'sufrati.com',
                     'silent' => TRUE
                 ));
-                $this->personalizedmailer->initqueue(array(
+            /*    $this->personalizedmailer->initqueue(array(
                     'addresses' => $emaillist,
                     'msgtemplate' => $newsLetterMsg,
                     'subject' => $subject,
@@ -336,7 +336,7 @@ class MyDiners extends MY_Controller
                     'ciemailconfig' => array(
                         'useragent' => 'Sufrati Mailer'
                     )
-                ));
+                ));*/
 
                 $this->MRestBranch->updateSendStatusDinerMessage($id);
                 $allowed_messages = $member['allowed_messages'];
@@ -344,11 +344,10 @@ class MyDiners extends MY_Controller
                 $this->MRestBranch->updateAllowedMessage($rest, $allowed_messages);
                 ignore_user_abort(true);
                 set_time_limit(0);
-                $this->personalizedmailer->sendtolist();
+               // $this->personalizedmailer->sendtolist();
 
 
-                $this->session->set_flashdata('message', 'Message sent succesfully');
-                redirect('mydiners/dinermessages');
+                returnMsg("success",'mydiners/dinermessages','Message sent succesfully');
             } else {
                 $this->session->set_flashdata('message', 'You have already used your allowed messages, Please contact us if you want to send more.');
                 redirect('accounts');
