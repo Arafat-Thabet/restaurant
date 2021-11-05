@@ -33,33 +33,32 @@
             font-weight: bold;
         }
 
-        @media (min-width: 576px) {
-            .image-cover {
-                display: none;
-            }
-
-            .login-box {
-                width: 100% !important
+        @media (min-width: 768px) {
+            .login {
+                height:100vh;
             }
         }
 
         @media (max-width: 575.98px) {
+        
+        }
+
+        @media (max-width: 767.98px) {
             .image-cover {
                 display: none;
             }
+            .article-box{
+                font-size: 10px !important;
+            }
+            .article-box h4{
+                font-size: 1rem !important;
+            }
+            .col-icons{
+                font-size: 26px !important;
+            }
 
             .login-box {
-                width: 100% !important
-            }
-        }
-
-        @media (min-width: 992px) {
-            .image-cover {
-                display: unset;
-            }
-
-            .login-box {
-                width: 75% !important
+                /* width: 75% !important */
             }
         }
 
@@ -88,16 +87,16 @@
 </head>
 
 <body>
-    <div class="container-fulid main-box mx-2">
-        <div class="row">
-            <div class="col-lg-7 image-cover">
+    <div class=" w-100 main-box m-auto">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7 image-cover">
                 <img style="height:100vh;" width="100%" src="<?= base_url("images/login.jpg") ?>" />
 
             </div>
-            <div class="col-sm-12 col-lg-5">
+            <div class="col-xs-8 col-md-5">
                 <div class="align-items-center justify-content-center login   m-auto login-box">
 
-                    <div class="login  m-auto row align-items-center login-box" style="height:100vh">
+                    <div class="login  m-auto row align-items-center login-box" style="">
                         <div class="container">
 
                             <?php
@@ -110,7 +109,7 @@
                                 echo '<br /><div class="alert alert-success"><a class="close" data-dismiss="alert">x</a><strong>' . $this->session->flashdata('message') . '</strong></div>';
                             }
                             ?>
-                            <form name="loginform" class="login-form" id="loginform" action="<?php echo base_url(); ?>home/login_form_submit" method="post">
+                            <form name="loginform" class="container" id="loginform" action="<?php echo base_url(); ?>home/login_form_submit" method="post">
                                 <div class="row">
                                 <img class="w-100" width="100%" src="<?= base_url("images/login_logo.png") ?>" />
 
@@ -187,26 +186,28 @@
 
         </div>
     </div>
-    <div class="clearfix"></div>
-    <section class="container-fulid article-box">
-        <div class="row text-center">
-            <div class="col-sm-4">
-                <div class="col-icons"><i class="fa fa-cog" aria-hidden="true"></i></div>
-                <h4><strong>Take control</strong> of your information</h4>
-                <p class="px-5">Verified owners and managers can edit their Sufrati.com page instantly to keep their important info up-to-date and accurate.<br> This way our viewers can reach you without any confusion.</p>
+    <div class="clearfix" ></div>
+    <div class="row mt-sm-2">
+        <section class=" article-box">
+            <div class="row text-center">
+                <div class="col-sm-4">
+                    <div class="col-icons"><i class="fa fa-cog" aria-hidden="true"></i></div>
+                    <h4><strong>Take control</strong> of your information</h4>
+                    <p class="">Verified owners and managers can edit their Sufrati.com page instantly to keep their important info up-to-date and accurate.<br> This way our viewers can reach you without any confusion.</p>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-icons"><i class="fa fa-bar-chart" aria-hidden="true"></i></div>
+                    <h4><strong>Promote</strong> your business</h4>
+                    <p class="px-2">Every month more than 600 thousand consumers decide where to eat on Sufrati.com. Claim your restaurant today and start using your Free profile page and if you decide to join one of our membership packages, we'll throw in a free 30-day ad! No credit card or any other obligation required.</p>
+                </div>
+                <div class="col-sm-4">
+                    <div class="col-icons"><i class="fa fa-users" aria-hidden="true"></i></div>
+                    <h4><strong>Interact</strong> with your customers</h4>
+                    <p class="px-2">By becoming an official member you can interact with your customers and give them the latest news about your Menus, events, locations and more. Sufrati.com offers you the easiest way to promote your offers directly to millions of potential customers all year round.</p>
+                </div>
             </div>
-            <div class="col-sm-4">
-                <div class="col-icons"><i class="fa fa-bar-chart" aria-hidden="true"></i></div>
-                <h4><strong>Promote</strong> your business</h4>
-                <p class="px-2">Every month more than 600 thousand consumers decide where to eat on Sufrati.com. Claim your restaurant today and start using your Free profile page and if you decide to join one of our membership packages, we'll throw in a free 30-day ad! No credit card or any other obligation required.</p>
-            </div>
-            <div class="col-sm-4">
-                <div class="col-icons"><i class="fa fa-users" aria-hidden="true"></i></div>
-                <h4><strong>Interact</strong> with your customers</h4>
-                <p class="px-2">By becoming an official member you can interact with your customers and give them the latest news about your Menus, events, locations and more. Sufrati.com offers you the easiest way to promote your offers directly to millions of potential customers all year round.</p>
-            </div>
-        </div>
-    </section>
+        </section>
+    </div>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/jquery3.6.0.min.js"></script>
     <script type="text/javascript" src="<?php echo base_url(); ?>js/new/bootstrap-alert.js"></script>
     <script>
