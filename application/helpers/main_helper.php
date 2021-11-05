@@ -94,7 +94,7 @@ if (!function_exists("sys_lang")) {
        
         
         if (!$lang) {
-            $lang = "arabic";
+            $lang = "english";
         }
         return $lang;
     }
@@ -142,6 +142,20 @@ if (!function_exists("rest_id")) {
         return get_instance()->session->userdata('rest_id');
     }
 }
+// ------------------------------------------------------------------------
+/**
+ *
+ * Return rest info 
+ *
+ * @return    int
+ */
+
+if (!function_exists("rest_info")) {
+    function rest_info()
+    {
+        return Smart::get_table_info("restaurant_info","*",array("rest_ID"=>rest_id()),false);
+    }
+}
 /**
  *
  * Return this_user id 
@@ -173,5 +187,18 @@ if (!function_exists("returnJson")) {
         header("Content-Type: application/json;charset=utf-8");
         echo json_encode($data);
         exit();
+    }
+}
+/**
+ *
+ * Return site email 
+ *
+ * @return    string
+ */
+
+if (!function_exists("site_email")) {
+    function site_email()
+    {
+      return "info@azooma.co"; 
     }
 }

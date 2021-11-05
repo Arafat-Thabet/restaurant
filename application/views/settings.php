@@ -2,9 +2,9 @@
 <div class="pt-3">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('settings'); ?>">My Account</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('home'); ?>"><?=lang('home')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">My Account </li>
+        <li class="active"><?=lang('my_account')?> </li>
     </ul>
 </div>
 <?php
@@ -27,19 +27,19 @@ echo message_box('success');
                     <fieldset>
 
                         <div class="form-group row mt-2">
-                            <label class="control-label col-md-3 col-lg-2" for="full_name"> Contact Person</label>
+                            <label class="control-label col-md-3 col-lg-2" for="full_name"> <?=lang('contact_person')?></label>
                             <div class="col-md-9">
-                                <input class="form-control" type="text" name="full_name" id="full_name" placeholder="Contact Person Name" <?php echo isset($member) ? 'value="' . $member['full_name'] . '"' : ""; ?> />
+                                <input class="form-control" type="text" name="full_name" id="full_name" placeholder="<?=lang('contact_person')?>" <?php echo isset($member) ? 'value="' . $member['full_name'] . '"' : ""; ?> />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-3 col-lg-2" for="phone"> Contact Number</label>
+                            <label class="control-label col-md-3 col-lg-2" for="phone"> <?=lang('contact_number')?></label>
                             <div class="col-md-9">
-                                <input type="text" class="form-control" name="phone" id="phone" placeholder="Contact Number" <?php echo isset($member) ? 'value="' . $member['phone'] . '"' : ""; ?> />
+                                <input type="text" class="form-control" name="phone" id="phone" placeholder="<?=lang('contact_number')?>" <?php echo isset($member) ? 'value="' . $member['phone'] . '"' : ""; ?> />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-12" for="email"> Contact Emails</label>
+                            <label class="control-label col-md-12" for="email"> <?=lang('contact_emails')?></label>
                             <div class="col-md-12 sufrati-backend-input-seperator" id="account-emails">
                                 <?php if (isset($member)) {
                                     $memberemails = explode(',', $member['email']);
@@ -48,7 +48,7 @@ echo message_box('success');
                                 ?>
                                         <div class="row my-2" >
                                         <div class="col-4">
-                                            <input class="form-control" type="text" name="emails[]" placeholder="Contact Email" <?php echo isset($memberemails) ? 'value="' . $memberemails[$i] . '"' : ""; ?> />
+                                            <input class="form-control" type="text" name="emails[]" placeholder="<?=lang('contact_email')?>" <?php echo isset($memberemails) ? 'value="' . $memberemails[$i] . '"' : ""; ?> />
                                         </div>
                                         <div class="col-6">
                                         <a class="btn mt-2 btn-danger email-remove py-0 px-1" href="javascript:void(0);" data-dismiss="input-<?php echo $i; ?>">&times;</a>
@@ -59,7 +59,7 @@ echo message_box('success');
                                 } else {
                                     ?>
                                     <div id="input-0">
-                                        <input class="form-control" type="text" name="emails[]" placeholder="Contact Email" />
+                                        <input class="form-control" type="text" name="emails[]" placeholder="<?=lang('contact_email')?>" />
                                     </div>
                                 <?php } ?>
                         </div>
@@ -70,36 +70,33 @@ echo message_box('success');
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-3 col-lg-2" for="preferredlang"> Preferred Language</label>
+                            <label class="control-label col-md-3 col-lg-2" for="preferredlang"> <?=lang('preferred_lang')?></label>
                             <div class="col-md-3 col-lg-2">
                                 <select class="form-control" name="preferredlang" id="preferredlang">
                                     <option value="0" <?php if (isset($member)) {
                                                             if ($member['preferredlang'] == 0) echo 'selected="selected"';
-                                                        } ?>>English</option>
+                                                        } ?>><?=lang('English')?></option>
                                     <option value="1" <?php if (isset($member)) {
                                                             if ($member['preferredlang'] == 1) echo 'selected="selected"';
-                                                        } ?>>Arabic</option>
+                                                        } ?>><?=lang('arabic')?></option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-3 col-lg-1" for="status">Publish</label>
+                            <label class="control-label col-md-3 col-lg-1" for="status"><?=lang('publish')?></label>
                             <div class="col-md-9">
                                 <input  type="checkbox" <?php if (!isset($member['status']) || $member['status'] == 1) echo 'checked="checked"'; ?> name="status" value="1" />
                             </div>
                         </div>
                         <div class="form-group row text-end">
                             <div class="col-md-12">
-                                <?php if (isset($member)) {
-                                ?>
-                                    <input type="hidden" name="rest_ID" value="<?php echo $member['rest_id']; ?>" />
-                                    <input type="hidden" name="id_user" value="<?php echo $member['id_user']; ?>" />
-                                <?php
-                                }
-                                ?>
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary" />
+                                
+                                    <input type="hidden" name="rest_ID" value="<?php echo rest_id(); ?>" />
+                                    <input type="hidden" name="id_user" value="<?php echo $id_user; ?>" />
+                             
+                                <input type="submit" name="submit" value="<?=lang('save')?>" class="btn btn-primary" />
                                 <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER'];
-                                            else echo base_url('settings'); ?>" class="btn" title="Cancel Changes">Cancel</a>
+                                            else echo base_url('settings'); ?>" class="btn" title="Cancel Changes"><?=lang('cancel')?></a>
                             </div>
                         </div>
                     </fieldset>

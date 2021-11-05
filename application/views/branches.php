@@ -2,9 +2,9 @@
 <div class="pt-2">
 <ul class="breadcrumb">
     <li class="breadcrumb-item">
-      <a href="<?php echo base_url('home'); ?>"> <?=lang('home')?></a> <span class="divider">/</span>
+      <a href="<?php echo base_url('home'); ?>"> <?=lang('Dashboard')?></a> <span class="divider">/</span>
     </li>
-    <li class="active"> <?=lang('rest_barnch')?></li>
+    <li class="active"> <?=lang('branches_locations')?></li>
   </ul>
   </div>
 <section class="card" id="top-banner">
@@ -24,6 +24,7 @@
         <?php
         if (count($total) > 0) {
         ?>
+        <div class="table-responsive">
 
           <table class="table table-bordered" id="basic-1">
             <thead class="text-center">
@@ -51,7 +52,7 @@
               <?php } ?>
             </tbody>
           </table>
-
+        </div>
 
         <?php
         }

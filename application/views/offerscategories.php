@@ -7,9 +7,9 @@
             echo message_box('error');
             echo message_box('success');
             ?>
-            <a href="<?php echo base_url('offers'); ?>">Special Offers</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('offers'); ?>"><?=lang('special_offers')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">offer </li>
+        <li class="active"><?=lang('offer')?> </li>
     </ul>
 </div>
 <section class="card">
@@ -23,10 +23,10 @@
     <div class="card-body ">
         <div class="text-end mb-2">
             <h4 class="pull-start">
-                Total Offer Categories (<?php echo $total; ?>)
+                <?=lang('total_offer_cat')?> (<?php echo $total; ?>)
 
             </h4>
-            <a href="<?php echo base_url('offers/form?rest=' . $rest['rest_ID']); ?>" title="Add new Offer" class="btn btn-primary ">Add new Offer</a>
+            <a href="<?php echo base_url('offers/form?rest=' . $rest['rest_ID']); ?>" title="<?=lang('add_new_offer')?>" class="btn btn-primary "><?=lang('add_new_offer')?></a>
         </div>
         <div id="results">
 
@@ -38,10 +38,10 @@
                 <table class="table table-bordered table-striped sufrati-backend-table" id="basic-1">
                     <thead>
                         <th class="span4">
-                            Category Name
+                           <?=lang('category_name')?>
                         </th>
                         <th>
-                            Category Name Arabic
+                           <?=lang('category_name_ar')?>
                         </th>
                     </thead>
                     <tbody>

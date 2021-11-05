@@ -62,7 +62,7 @@ td {
               </tr>
                     <tr>
                       
-                      <td style="padding-top:10px;" width="56%"><a href="http://restaurant.sufrati.com" target="_blank">http://restaurant.sufrati.com</a></td>
+                      <td style="padding-top:10px;" width="56%"><a href="<?=base_url()?>" target="_blank">http://restaurant.sufrati.com</a></td>
                       <td style="padding-top:10px;" width="44%"><strong>أنقر على الرابط للدخول لحسابك : </strong></td>
                     </tr>
                         </table>

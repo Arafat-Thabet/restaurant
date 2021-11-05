@@ -73,8 +73,18 @@
             overflow: hidden;
         }
         .main-box{overflow: hidden;}
+        .pull-end{float: right;}
+        .pull-start{float: left;}
+        .text-end{text-align: end;}
     </style>
-
+<?php if(sys_lang()=="arabic"){ ?>
+    <style>
+        body{text-align: right;
+        }
+        .pull-end{float: left;}
+        .pull-start{float: right;}
+    </style>
+<?php } ?>
 </head>
 
 <body>
@@ -105,41 +115,43 @@
                                 <img class="w-100" width="100%" src="<?= base_url("images/login_logo.png") ?>" />
 
                                 </div>
-                                <h3 class="text-center w-100">Login</h3>
+                             
+                                <h3 class="text-center w-100"><?=lang('login')?></h3>
                                 <div class="row">
                                     <div class="form-group w-100">
-                                        <label for="username">Username</label>
-                                        <input type="text" name="User" class="form-control" id="username" placeholder="" required>
+                                        <label for="username"><?=lang('user_name')?></label>
+                                        <input type="text" value="<?=isset($_COOKIE['remember_me_user_name']) ? $_COOKIE['remember_me_user_name'] : ''?>" name="User" class="form-control" id="username" placeholder="" required>
                                     </div>
                                     <div class="form-group w-100">
-                                        <label for="password">Password</label>
-                                        <input type="password" name="Password" class="form-control" id="password" placeholder="" required>
+                                        <label for="password"><?=lang('password')?></label>
+                                        <input type="password" value="<?=isset($_COOKIE['remember_me_password']) ? $_COOKIE['remember_me_password'] : ''?>" name="Password" class="form-control" id="password" placeholder="" required>
                                     </div>
-                                    <div class="form-check w-100">
-                                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                        <label class="form-check-label" for="exampleCheck1">Remember me</label>
-                                        <span class="text-right float-right"><a class="forgot-password text-danger" href="#" hrefa="<?= base_url("home/forgot") ?>">Forget password?</a></span>
+                                    <div class="form-check w-100 <?=sys_lang()=="english"?"pl-0" :""?>">
+                                       <span class="pull-end"> <input type="checkbox" <?=isset($_COOKIE['remember_me']) && $_COOKIE['remember_me']=="on" ? "checked" :""?> name="remember_me" class="form-check-input" id="exampleCheck1">
+                                        <label class="form-check-label" for="exampleCheck1"> <?=lang('remember_me')?></label>
+                                       </span>
+                                        <span class="text-end"><a class="forgot-password text-danger" href="#" hrefa="<?= base_url("home/forgot") ?>"><?=lang('is_forget_password')?></a></span>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row ">
 
                                     <input type="hidden" name="redirect" value="<?php echo $redirect; ?>" />
-                                    <div class="mt-1" style="float:left;margin-right:105px;">
-                                        <select class="form-control reg-input" name="language" id="language" style="width:180px;">
+                                    <div class="mt-2 col-md-12 p-0" >
+                                        <select class="form-control reg-input pull-start text-start" name="language" id="language" style="width:180px;">
                                             <option value="0">English - الإنجليزية</option>
                                             <option value="1">Arabic - العربية</option>
                                         </select>
                                     </div>
 
-                                    <button type="submit" class="btn btn-danger w-100 mt-2">Login <i class="fa fa-arrow-right"></i></button>
-                                    <a class="btn btn-lg btn-default mt-3 btn-block text-danger border-danger" href="https://stage.azooma.co/london/add-restaurant">Create Account</a></span>
+                                    <button type="submit" class="btn btn-danger w-100 mt-2"><?=lang('login')?> <i class="fa fa-arrow-right"></i></button>
+                                    <a class="btn btn-lg btn-default mt-3 btn-block text-danger border-danger" href="https://stage.azooma.co/london/add-restaurant"><?=lang('create_account')?></a></span>
 
                                 </div>
                             </form>
                             <form class="forget-form d-none" autocomplete="off" action="<?php echo base_url() ?>home/restpassword" method="POST" id='rest_pass-form'>
 
                                 <h3 class="text-center h4 text-danger"><i class="fa fa-lg fa-3x  fa-lock"></i></h3>
-                                <h3 class="text-center  mb-2"> Rest Password </h3>
+                                <h3 class="text-center  mb-2">  <?=lang('rest_password')?></h3>
 
                                 <p class="text-center"> </p>
 
@@ -149,7 +161,7 @@
                                         <div class="input-group-prepend">
                                             <span class="input-group-text"><i class="fa fa-tasks color-blue"></i></span>
                                         </div>
-                                        <input id="rest_name" name="rest_name" placeholder="Restaurant Name - اسم المطعم " class="form-control" type="text" required>
+                                        <input id="rest_name" name="user_name" placeholder="<?=lang('user_name')?>  " class="form-control" type="text" required>
                                     </div>
 
                                 </div>
@@ -161,10 +173,10 @@
                                         <input id="email" name="user_email" placeholder="Your Email - البريد الإلكتروني" class="form-control form-focus" type="email" required>
                                     </div>
                                     <div class="form-group btn-container mt-2">
-                                        <button class="btn btn-danger btn-block ">Send <i class="fa fa-arrow-right"></i></button>
+                                        <button class="btn btn-danger btn-block "><?=lang('send')?> <i class="fa fa-arrow-right"></i></button>
                                     </div>
                                     <div class="form-group mt-3">
-                                        <p class="semibold-text mb-0 "><a class="text-danger" href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i> Back to Login</a></p>
+                                        <p class="semibold-text mb-0 "><a class="text-danger" href="#" data-toggle="flip"><i class="fa fa-angle-left fa-fw"></i> <?=lang('back2login')?></a></p>
                                     </div>
                             </form>
                         </div>

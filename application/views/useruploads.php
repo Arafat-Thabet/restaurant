@@ -13,13 +13,6 @@ echo message_box('success');
 <link href="<?= base_url(css_path()) ?>/datatable/datatable.css" rel="stylesheet">
 
 <section class="card">
-
-
-  <?php
-  if (count($total) > 0) {
-    echo  $this->pagination->create_links();
-  }
-  ?>
   <div class="card-body">
     <article class="span12 accordion-group">
       <h3> <?=lang('latest_photo')?> </h3>
@@ -41,11 +34,11 @@ echo message_box('success');
                 $i++; ?>
                 <tr <?php if (isset($p['is_read'])) if ($p['is_read'] == 0) { ?> class="new-row" onclick="readPhoto('<?php echo $p['image_ID'] ?>')" <?php }  ?> data-row="<?php echo $p['image_ID'] ?>">
                   <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>><?php echo $i; ?></td>
-                  <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>><img src="http://uploads.azooma.co/Gallery/thumb/<?php echo $p['image_full']; ?>" width="100" /></td>
+                  <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>><img src="<?=app_files_url()?>Gallery/thumb/<?php echo $p['image_full']; ?>" width="100" /></td>
                   <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?> width="350px"><?php echo $this->MRestBranch->getUserName($p['user_ID']); ?></td>
                   <td <?php if (isset($p['status'])) if ($p['status'] == 0) echo 'class="strike"';  ?>> <?php echo date('jS M Y H:i:s',  strtotime($p['enter_time'])); ?></td>
                   <td class="text-center">
-                    <a class="<?php echo $p['status'] == 0 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-danger'; ?>" title="<?php echo $p['status'] == 0 ? 'Activate' : 'Deactivate'; ?>" href="<?php echo base_url('home/usergallerystatus?id=' . $p['image_ID'] . '&ref=1&limit=' . $limit . '&per_page=' . $per_page); ?>" rel="tooltip" data-original-title="<?php echo $p['status'] == 0 ? 'Activate the Image' : 'Deactivate the Image'; ?>">
+                    <a class="<?php echo $p['status'] == 0 ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-danger'; ?>" title="<?php echo $p['status'] == 0 ? lang('activate') : lang('deactivate'); ?>" href="<?php echo base_url('home/usergallerystatus?id=' . $p['image_ID'] . '&ref=1&limit=' . $limit . '&per_page=' . $per_page); ?>" rel="tooltip" data-original-title="<?php echo $p['status'] == 0 ? 'Activate the Image' : 'Deactivate the Image'; ?>">
                       <i <?php echo $p['status'] == 0 ? 'class="fa fa-check"' : 'class="fa fa-ban"'; ?>> </i> 
                     </a>
                   </td>
@@ -62,11 +55,7 @@ echo message_box('success');
     </article>
   </div>
 
-  <?php
-  if (count($total) > 0) {
-    echo  $this->pagination->create_links();
-  }
-  ?>
+
 
 </section>
 

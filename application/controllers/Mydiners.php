@@ -16,6 +16,7 @@ class MyDiners extends MY_Controller
         $this->load->model('Mrestbranch',"MRestBranch");
         $this->load->library('pagination');
         $this->load->library('images');
+        Smart::model("DinersModel");
         //$this->output->enable_profiler(true);
         if ($this->session->userdata('restuser') == '') {
             redirect('home/login');
@@ -42,9 +43,9 @@ class MyDiners extends MY_Controller
         $data['sitename'] = $this->MGeneral->getSiteName();
         $data['logo'] = $logo = $this->MGeneral->getLogo();
         $data['rest'] = $restdata = $this->MGeneral->getRest($restid, false, true);
-
-        $data['likedpeople'] = $this->MRestBranch->getLikeUsers($restid, $sortby);
-        $data['totallikedpeople'] = $this->MRestBranch->getLikePercentage($restid, 1);
+    
+      
+        $data['total_diner'] = $this->DinersModel->getTotalDiners($restid, 1);
         $data['pagetitle'] = $data['title'] = "My Diners";
         $data['member'] = $this->MRestBranch->getAccountDetails($rest);
 
@@ -62,8 +63,8 @@ class MyDiners extends MY_Controller
         $data['member'] = $member = $this->MRestBranch->getAccountDetails($rest);
         if ($member['allowed_messages'] > 0) {
         } else {
-            $this->session->set_flashdata('message', 'You have already used your allowed messages, Please contact us if you want to send more.');
-            redirect('accounts');
+            $this->session->set_flashdata('message',lang('my_diner_plan_error'));
+            returnMsg("error","accounts",lang('my_diner_plan_error'));
         }
         $uuserid = $this->session->userdata('id_user');
         $permissions = $this->MBooking->restPermissions($restid);
@@ -73,6 +74,8 @@ class MyDiners extends MY_Controller
         $data['logo'] = $logo = $this->MGeneral->getLogo();
         $data['rest'] = $restdata = $this->MGeneral->getRest($restid, false, true);
         $data['likedpeople'] = $this->MRestBranch->getLikeUsers($restid);
+      
+        $data['diners'] = $this->DinersModel->getAllMyDiners();
         $user_ID = 0;
         $type = 0;
         $title = "";
@@ -89,7 +92,7 @@ class MyDiners extends MY_Controller
         }
         $data['audienceType'] = $type;
         $data['pagetitle'] = $title;
-        $data['title'] = "Prepare Message for Dinner's | " . $sitename;
+        $data['title'] = lang('my_diner_title') . $sitename;
 
         $data['js'] = 'member,validate,charCount';
         $data['main'] = 'messagediner';
@@ -100,6 +103,7 @@ class MyDiners extends MY_Controller
 
     function savemessage()
     {
+     
         if ($this->input->post('subject')) {
             $rest = $restid = $this->session->userdata('rest_id');
             $rest_data = $this->MGeneral->getRest($restid, false, true);
@@ -110,8 +114,7 @@ class MyDiners extends MY_Controller
                     $image = $this->upload_image('image', 'images/');
                     list($width, $height, $type, $attr) = getimagesize('images/' . $image);
                     if ($width < 200 && $height < 200) {
-                        $msg= 'Image is very small. Please upload image which must be bigger than 200*200 width and height';
-                       
+                        $msg= lang('img_upload_size_error');
                         returnMsg("error","mydiners/sendMessage",$msg);
                     }
                     if (($width > 800) || ($height > 500)) {
@@ -134,7 +137,7 @@ class MyDiners extends MY_Controller
                     } else {
                         $audienceType = $this->input->post('audienceType');
                         if ($audienceType == 3) {
-                            $receivers = $this->input->post('msg');
+                            $receivers = $this->input->post('diners');
                             $total_receiver = count($receivers);
                             $receivers = implode(",", $receivers);
                             $this->MRestBranch->updateDinerMessage($id, $rest, $total_receiver, $receivers, $image);
@@ -147,7 +150,7 @@ class MyDiners extends MY_Controller
                     if ($messageData['status'] == 0) {
                         redirect('mydiners/view/' . $id);
                     } else {
-                        $msg= 'Message save save succesfully';
+                        $msg= lang('saved_msg_done');
                         returnMsg("success","mydiners/sendMessage",$msg);
                     }
                 } else {
@@ -161,7 +164,7 @@ class MyDiners extends MY_Controller
                         $audienceType = $this->input->post('audienceType');
                         $audienceType = $this->input->post('audienceType');
                         if ($audienceType == 3) {
-                            $receivers = $this->input->post('msg');
+                            $receivers = $this->input->post('diners');
                             $total_receiver = count($receivers);
                             $receivers = implode(",", $receivers);
                             $id = $this->MRestBranch->addDinerMessage($rest, $total_receiver, $receivers, $image);
@@ -174,8 +177,9 @@ class MyDiners extends MY_Controller
                     redirect('mydiners/view/' . $id);
                 }
             } else {
-                $this->session->set_flashdata('message', 'You have already used your allowed messages, Please contact us if you want to send more.');
-                redirect('accounts');
+                $this->session->set_flashdata('message', lang('diner_msg_error_plan'));
+                returnMsg("error","accounts",lang('diner_msg_error_plan'));
+
                 //returnMsg("success","mydiners/sendMessage",$msg);
 
             }
@@ -193,11 +197,13 @@ class MyDiners extends MY_Controller
         $permissions = $this->MBooking->restPermissions($restid);
         $permissions = explode(',', $permissions['sub_detail']);
 
-        $data['pagetitle'] = $data['title'] = "All Messages";
+        $data['pagetitle'] = $data['title'] = lang("all_messages");
         $data['member'] = $this->MRestBranch->getAccountDetails($rest);
         $data['messages'] = $this->MRestBranch->getAllDinerMessages($rest);
         $data['total'] = count($data['messages']);
         $data['main'] = 'viewmessages';
+        $data['side_menu'] = array("mydiners","dinermessages");
+
         $this->layout->view('viewmessages', $data);
     }
 
@@ -230,6 +236,7 @@ class MyDiners extends MY_Controller
         $data['logo'] = $logo = $this->MGeneral->getLogo();
         $data['rest'] = $restdata = $this->MGeneral->getRest($restid, false, true);
         $data['member'] = $this->MRestBranch->getAccountDetails($rest);
+        $data['diners'] = $this->DinersModel->getAllMyDiners();
 
         if (!empty($id)) {
             $diner = "";
@@ -263,6 +270,7 @@ class MyDiners extends MY_Controller
 
     function send($id)
     {
+     
         if (!empty($id)) {
             $data['settings'] = $settings = $this->MGeneral->getSettings();
             $data['sitename'] = $this->MGeneral->getSiteName();
@@ -287,70 +295,26 @@ class MyDiners extends MY_Controller
                 $names = array();
                 $emaillist = array();
                 $ids = array();
-                //                $emaillist[] = 'ha@sufrati.com';
-                //                $names[] = "Haroon";
-                //                $emaillist[] = 'aas@sufrati.com';
-                //                $names[] = "Amer";
-
-                if (is_array($audiences)) {
-                    foreach ($audiences as $audience) {
-                        if (!empty($audience['user_Email'])) {
-                            $name = "";
-                            if (!empty($audience['user_NickName'])) {
-                                $name = $audience['user_NickName'];
-                            } else {
-                                $name = $audience['user_FullName'];
-                            }
-                            $emaillist[] = $audience['user_Email'];
-                            $names[] = $name;
-                            $ids[] = $audience['user_ID'];
-                            $counter++;
-                        }
-                    }
-                }
+               
+              $to_emails=$this->DinersModel->getToList($id);
                 $newsLetterMsg = $this->load->view('mails/dinermessage', $data, true);
-          //    $this->load->spark('personalized-email/1.0.3');
-                $count = count($emaillist);
-
-                /*                 * ******
-                 * Directory Local --> /Users/walidsanchez/Development/Sites/sufrati/sa/Mail
-                 * 
-                 * Directory online --> /home/diner/public_html/sa/Mail
-                 */
-                // $this->load->library('personalizedmailer');
-              /*  $this->load->library('personalizedmailer', array(
-                    'pmdatadir' => BASEPATH,
-                    'domain' => 'sufrati.com',
-                    'silent' => TRUE
-                ));*/
-            /*    $this->personalizedmailer->initqueue(array(
-                    'addresses' => $emaillist,
-                    'msgtemplate' => $newsLetterMsg,
-                    'subject' => $subject,
-                    'fromname' => "Sufrati Newsletter",
-                    'fromaddr' => 'noreply@newsletter.sufrati.com',
-                    'HTML' => true,
-                    'loopdelay' => 2,
-                    'varsearch' => array('[name]', '[email]', '[id]'),
-                    'varreplace' => array($names, $emaillist, $ids),
-                    'ciemailconfig' => array(
-                        'useragent' => 'Sufrati Mailer'
-                    )
-                ));*/
+                ignore_user_abort(true);
+                set_time_limit(0);
+                   $this->load->helper("email_message_helper");
+                   sendSysMail($to_emails,$newsLetterMsg,$subject);
+       
 
                 $this->MRestBranch->updateSendStatusDinerMessage($id);
                 $allowed_messages = $member['allowed_messages'];
                 $allowed_messages = $allowed_messages - 1;
                 $this->MRestBranch->updateAllowedMessage($rest, $allowed_messages);
-                ignore_user_abort(true);
-                set_time_limit(0);
-               // $this->personalizedmailer->sendtolist();
-
-
-                returnMsg("success",'mydiners/dinermessages','Message sent succesfully');
+           
+         
+                returnMsg("success",'mydiners/dinermessages',lang('send_msg_done'));
             } else {
-                $this->session->set_flashdata('message', 'You have already used your allowed messages, Please contact us if you want to send more.');
-                redirect('accounts');
+                $this->session->set_flashdata('message', lang('diner_msg_error_plan'));
+                returnMsg("error",'accounts',lang('diner_msg_error_plan'));
+
             }
         } else {
             show_404();
@@ -418,10 +382,12 @@ class MyDiners extends MY_Controller
         returnJson(["data" => $card_data, "total_records" => $total_records, "offset" => $offset]);
     }
     private function diner_card($card_data,$other_data=array()){
-        $remoteFile = 'http://uploads.azooma.co/images/'.$card_data->image;
-       $handle = $this->does_url_exists($remoteFile);
-        $img=        $handle ? 'http://uploads.azooma.co/images/'.$card_data->image: base_url("images/user-default.svg");
+        $remoteFile =app_files_url(). 'images/'.$card_data->image;
+        $upload_url=$this->config->item('upload_url');
+       $handle = file_exists($upload_url.'images/'.$card_data->image);
+        $img=        $handle ? app_files_url().'images/'.$card_data->image: base_url("images/user-default.svg");
         $html='';
+        $sa_url=$this->config->item('sa_url');
  
         $html.='<div class="col-md-6 col-lg-3 box-col-6">
         <div class="card custom-card p-0">
@@ -431,28 +397,26 @@ class MyDiners extends MY_Controller
             <h6>'.$card_data->city_name." ".($card_data->user_Country ?  " ,".$card_data->user_Country:'').'</h6>
             </div>
             <div class="card-footer row">
-                <div class="col-4 col-sm-4">
+                <div class="col-6">
                     <h6>'.lang('followers').'</h6>
                     <h5 class="counter">'.$other_data['follower'].'</h5>
                 </div>
-                <div class="col-4 col-sm-4">
+                <div class="col-6">
                     <h6>'.lang('reviews').'</h6>
                     <h5><span class="counter">'.$other_data['reviews'].'</span></h5>
                 </div>
-                <div class="col-4 col-sm-4">
-                    <h6>Booking </h6>
-                    <h5><span class="counter">0</span></h5>
-                </div>
+            
             </div>
             <div class="card-footer row">
-                <div class="col-4 col-sm-4">
+                <div class="col-6">
+                <a class="text-dark" title="'.lang('send_msg').'" href="'.base_url('mydiners/sendMessage?user_ID=' . $card_data->user_ID).'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                </a>
                 </div>
-                <div class="col-4 col-sm-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-settings"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                </div>
-                <div class="col-4 col-sm-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            
+                <div class="col-6">
+                <a class="text-dark" title="'.lang('view').'" href="'.$sa_url.'user/' . $card_data->user_ID.'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>                </a>
                 </div>
             </div>
         </div>

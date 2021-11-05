@@ -48,10 +48,10 @@
         <div class="title-text"> <span class="logintitle">Restaurant Access - بوابة مطعمك</span> </div>
         <form name="loginform" id="loginform" action="<?php echo base_url();?>home/restpassword" method="post">
           <p>
-            <input type="text" name="rest_name" id="rest_name" placeholder="Restaurant Name - اسم المطعم " class="input required "  value="" size="20" tabindex="10" />
+            <input type="text" name="user_name" id="rest_name" placeholder="User Name - اسم المستخدم " class="input required "  value="" size="20" tabindex="10" />
           </p>
           <p>
-            <input type="text" name="user_email" id="user_email" placeholder="Your Email Address - العنوان الإلكتروني " class="input required" value="" size="20" tabindex="20" />
+            <input type="text" name="user_email" id="user_email" placeholder="Your Email Address - البريد الإلكتروني " class="input required" value="" size="20" tabindex="20" />
           </p>
          
           <p>

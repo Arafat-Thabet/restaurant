@@ -1,126 +1,49 @@
 <div class="breadcrumb-div">
 <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('home'); ?>"><?=lang('home')?></a> <span class="divider">/</span>
+            <a href="<?php echo base_url('home'); ?>"><?=lang('Dashboard')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">My Diners </li>
+        <li class="active"><?=lang('my_diner')?> </li>
     </ul>
 </div>
+<?php
+echo message_box('error');
+echo message_box('success');
+?>
 <section id="top-banner">
  
 
     <div class="row-fluid spacer">
-        <article class="left span12 accordion-group">
             <h2 data-toggle="collapse" class="accordion-heading " data-target="#results">
                 <div class="accordion-toggle" href="javascript:void(0);">
                     <h4 class="d-inline-block">
-                        <?php echo $pagetitle . '  (' . $totallikedpeople . ')'; ?>
-                        <span style=" margin-left: 25px;font-size: 14px;">
-                        Followers (<?php echo count($likedpeople); ?>)
-                        </span>
-                        <span style=" margin-left: 25px;font-size: 14px;">
-                        Guest Users
-                        (<?php
-echo $guests = $totallikedpeople - count($likedpeople);
-?>)
-                        </span>
+                        <?php echo $pagetitle . '  (' . $total_diner . ')'; ?>
+                      
+                    
 
                     </h4>
              
 
                     <span class="float-end">
-                        <a class="right-float btn btn-primary link-heading" href="<?php echo site_url('mydiners/dinermessages'); ?>"> <img src="<?php echo site_url('images/messages20.png'); ?>" alt=""/> History</a>
+                        <a class="right-float btn btn-primary link-heading" href="<?php echo base_url('mydiners/dinermessages'); ?>"> <img src="<?php echo base_url('images/messages20.png'); ?>" alt=""/> History</a>
                         <?php if ($member['allowed_messages'] > 0) {?>
-                        <a class="right-float btn btn-danger link-heading" href="<?php echo site_url('mydiners/sendMessage'); ?>"> <i class="icon-envelope icon-white"></i> Send Message </a>
+                        <a class="right-float btn btn-danger link-heading" href="<?php echo base_url('mydiners/sendMessage'); ?>"> <i class="icon-envelope icon-white"></i> Send Message </a>
                         <?php } else {?>
-                        <a class="right-float btn btn-primary link-heading" href="<?php echo site_url('accounts'); ?>"> <i class="icon-envelope icon-white"></i> Purchase Messages </a>
+                        <a class="right-float btn btn-primary link-heading" href="<?php echo base_url('accounts'); ?>"> <i class="icon-envelope icon-white"></i> Purchase Messages </a>
                         <?php }?>
                     </span>
                 </div>
             </h2>
-            <div id="resultsss" class="collapse in accordion-inner">
-                <?php
-if ($this->session->flashdata('error')) {
-    echo '<br /><div class="alert alert-error"><a class="close" data-dismiss="alert">x</a><strong>' . $this->session->flashdata('error') . '</strong></div>';
-}
-if ($this->session->flashdata('message')) {
-    echo '<br /><div class="alert alert-success"><a class="close" data-dismiss="alert">x</a><strong>' . $this->session->flashdata('message') . '</strong></div>';
-}
-?>
-                            <form class="no-margin" name="diner-form" id="diner-form" method="post" action="<?php echo site_url('mydiners/sendMessage'); ?>">
-            <!--                    <div class="">
-                        <a href="#">Latest</a> |
-                        <a href="#">Oldest</a>
-                    </div>-->
-                    <div class="overflow customer-main" >
-
-                        <?php
-if (count($likedpeople) > 0) {
-    foreach ($likedpeople as $person) {
-        $userimage = $person['image'];
-        if ($userimage == "") {
-            $userimage = 'user-default.svg';
-        }
-        ?>
-                                    <div class="overflow customer">
-
-                                    <a class="customer-title" target="_blank" title="<?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="<?php echo $this->config->item('sa_url') . ('user/' . $person['user_ID']); ?>">
-                                        <?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>
-                                    </a>
-
-                                    <a target="_blank" class="customer-body" title="<?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="<?php echo $this->config->item('sa_url') . ('user/' . $person['user_ID']); ?>">
-                                        <img src="http://uploads.azooma.co/images/userx130/<?php echo $userimage; ?>" alt="<?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" width="100" height="100" style="min-width:100px;width:100px;min-height:100px;height:100px;"/>
-                                    </a>
-                                    <span>
-                                        Since <?php echo date('Y', strtotime($person['createdAt'])); ?>
-                                        <?php
-if (!empty($person['user_City'])) {
-            if (!is_numeric($person['user_City'])) {
-                echo " | " . $person['user_City'];
-            } else {
-                $city = "";
-                $city = $this->MGeneral->getCity($person['user_City']);
-                if (is_array($city)) {
-                    echo " | " . $city['city_Name'];
-                }
-            }
-        }
-        ?>
-                                    </span>
-                                    <div>
-                                        <input class="icon-seprate msg-class hidden" type="checkbox" name="msg[]" value="<?php echo $person['user_ID']; ?>">
-                                                    <?php
-if (isset($person['action']) && $person['action'] == "review") {
-            ?>
-                                        <a target="_blank" title="View Comment of <?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="<?php echo $this->config->item('sa_url') . ('rest/' . $rest['seo_url'] . '#comment-' . $person['actionID']); ?>"><i class="icon-comment  icon-seprate"></i></a>
-                                        <?php }?>
-                                        <a target="_blank" title="View Profile of <?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="<?php echo $this->config->item('sa_url') . ('user/' . $person['user_ID']); ?>"><i class="icon-user icon-seprate"></i></a>
-                                        <a title="Send Message <?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="<?php echo site_url('mydiners/sendMessage?user_ID=' . $person['user_ID']); ?>"><i class="icon-envelope "></i></a>
-                                    </div>
-                                </div>
-                                <?php
-}
-}
-?>
-                    </div>
-                    <div class="control-group submit-class hidden">
-                        <div class="controls">
-                            <input type="submit" name="submit" value="Submit" class="btn btn-primary right-float">
-                        </div>
-                    </div>
-                    <div class="control-group margin-bottom">
-                    </div>
-                </form>
+ 
             </div>
-        </article>
-    </div>
+    
 </section>
 
 
 <section class="container-fluid">
     <div class="row my-3">
         <div class="col-md-5">
-            <input placeholder="search" type="text" id="diner-search" class="form-control" />
+            <input placeholder="<?=lang('search')?>" type="text" id="diner-search" class="form-control" />
         </div>
     </div>
 <div class="row staff-grid-row"  id="diners-list" >

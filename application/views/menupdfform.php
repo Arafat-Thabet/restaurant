@@ -1,9 +1,9 @@
 <div class="pt-2">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('menus'); ?>">Menus</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('menus'); ?>"><?=lang('menu_management')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">Pdf Menus </li>
+        <li class="active"><?=lang('pdf_menus')?> </li>
 
     </ul>
 </div>
@@ -24,7 +24,7 @@ echo message_box('success');
                 <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo base_url('menus/savepdf'); ?>" enctype="multipart/form-data">
                     <fieldset>
                         <div class="form-group row">
-                            <label class="control-label col-md-12" for="menu">PDF Menu English<br><span class="small-text" style="font-size:12px;">(1MB)</span></label>
+                            <label class="control-label col-md-12" for="menu"><?=lang('pdf_menu_english')?><br><span class="small-text" style="font-size:12px;">(1MB)</span></label>
                             <div class="col-md-12">
                                 <input class="form-control" type="file" name="menu" id="menu" />
                                 <?php
@@ -38,7 +38,7 @@ echo message_box('success');
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-12" for="menu_ar">PDF Menu Arabic<br><span class="small-text" style="font-size:12px;">(1MB)</span></label>
+                            <label class="control-label col-md-12" for="menu_ar"><?=lang('pdf_menu_ar')?><br><span class="small-text" style="font-size:12px;">(1MB)</span></label>
                             <div class="col-md-12">
                                 <input class="form-control" type="file" name="menu_ar" id="menu_ar" />
                                 <?php
@@ -52,15 +52,15 @@ echo message_box('success');
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-12" for="title">Title</label>
+                            <label class="control-label col-md-12" for="title"><?=lang('title')?></label>
                             <div class="col-md-12">
-                                <input type="text" name="title" class="form-control" required id="title" placeholder="Title" <?php echo isset($menu) ? 'value="' . (htmlspecialchars($menu['title'])) . '"' : ""; ?> />
+                                <input type="text" name="title" class="form-control" required id="title" placeholder="<?=lang('title')?>" <?php echo isset($menu) ? 'value="' . (htmlspecialchars($menu['title'])) . '"' : ""; ?> />
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="control-label col-md-12" for="title_ar">Title Arabic</label>
+                            <label class="control-label col-md-12" for="title_ar"><?=lang('title_ar')?></label>
                             <div class="col-md-12">
-                                <input type="text" class="form-control" required name="title_ar" id="title_ar" placeholder="Title Arabic" <?php echo isset($menu) ? 'value="' . (htmlspecialchars($menu['title_ar'])) . '"' : ""; ?> />
+                                <input type="text" class="form-control" required name="title_ar" id="title_ar" placeholder="<?=lang('title_ar')?>" <?php echo isset($menu) ? 'value="' . (htmlspecialchars($menu['title_ar'])) . '"' : ""; ?> />
                             </div>
                         </div>
 
@@ -76,9 +76,9 @@ echo message_box('success');
                                 <?php
                                 }
                                 ?>
-                                <input type="submit" name="submit" value="Save" class="btn btn-primary" />
+                                <input type="submit" name="submit" value="<?=lang('save')?>" class="btn btn-primary" />
                                 <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER'];
-                                            else echo base_url('hungryn137/menu'); ?>" class="btn" title="btn btn-default Changes">Cancel</a>
+                                            else echo base_url('hungryn137/menu'); ?>" class="btn" title="btn btn-default Changes"><?=lang('cancel')?></a>
                             </div>
                         </div>
                     </fieldset>

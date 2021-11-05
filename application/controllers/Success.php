@@ -8,9 +8,7 @@ class Success extends MY_Controller {
         $this->load->model('Mrestbranch',"MRestBranch");
         $this->load->library('pagination');
         //$this->output->enable_profiler(true);
-        if($this->session->userdata('restuser') == ''){
-            redirect('home/login');
-        }
+       
     }
     
     function index($item=0){

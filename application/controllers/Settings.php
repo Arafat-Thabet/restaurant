@@ -15,16 +15,16 @@ class Settings extends MY_Controller {
     }
     
     function index($item=0){
-        
+     
         $rest=$restid=$this->session->userdata('rest_id');
-        $uuserid=$this->session->userdata('id_user');
+       $data['id_user']= $uuserid=$this->session->userdata('id_user');
         $permissions=$this->MBooking->restPermissions($restid);
         $permissions=explode(',',$permissions['sub_detail']);
         $data['settings']=$settings=  $this->MGeneral->getSettings();
         $data['sitename']=$this->MGeneral->getSiteName();
         $data['logo']=$logo=$this->MGeneral->getLogo();
         $data['rest']=$restdata=$this->MGeneral->getRest($restid,false,true);
-        $data['pagetitle']=$data['title']="Contact Details - ".(htmlspecialchars($data['rest']['rest_Name']));
+        $data['pagetitle']=$data['title']=lang('contact_details')." - ".(htmlspecialchars($data['rest']['rest_Name']));
         $data['member']=  $this->MRestBranch->getAccountDetails($rest);
         
         $data['js']='member,validate';
@@ -34,14 +34,15 @@ class Settings extends MY_Controller {
     }
     
     function save(){
-        if($this->input->post('rest_ID')){
-            $restid=$this->session->userdata('rest_id');
+  
+        if(rest_id()){
+            $restid=rest_id();
             $rest=$restdata=$this->MGeneral->getRest($restid,false,true);
-            $member= $this->MRestBranch->getAccountDetails($rest['rest_ID']);
+            $member= $this->MRestBranch->getAccountDetails( $restid);
             $this->MRestBranch->updateMemberContacts();
-            returnMsg("success",'settings',(htmlspecialchars($rest['rest_Name'])).' Account contact details updated');
+            returnMsg("success",'settings',(htmlspecialchars($rest['rest_Name']))." ".lang('account_updated'));
         }else{
-            returnMsg("error","settings",'Some error occured, Pleas try again.');
+            returnMsg("error","settings",lang('proccess_error'));
         }
     }
   

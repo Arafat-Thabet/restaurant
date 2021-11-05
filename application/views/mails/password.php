@@ -62,7 +62,7 @@ td {
               </tr>
                     <tr>
                       <td style="padding-top:10px;font-family:Arial, Helvetica, sans-serif; font-size:14px;" width="44%"><strong>Click the link to access your account: </strong></td>
-                      <td style="padding-top:10px;font-family:Arial, Helvetica, sans-serif; font-size:14px;" width="56%"><a href="http://restaurant.sufrati.com" target="_blank">http://restaurant.sufrati.com</a></td>
+                      <td style="padding-top:10px;font-family:Arial, Helvetica, sans-serif; font-size:14px;" width="56%"><a href="<?=base_url()?>" target="_blank">http://restaurant.sufrati.com</a></td>
                     </tr>
                         </table>
                       </td>

@@ -16,17 +16,25 @@ class Home extends CI_Controller
         $this->load->model('Mbooking',"MBooking");
         $this->load->model('Mrestbranch',"MRestBranch");
         $this->load->library('pagination');
-        //$this->output->enable_profiler(true);
+        $sys_lang=$this->session->userdata("lang");
+        if($sys_lang=='arabic' or $sys_lang=='english'){
+         $this->lang->load($sys_lang,  $sys_lang);
+        }
+        else{
+            $this->session->set_userdata('lang', 'arabic'); 
+            $this->lang->load('arabic', 'arabic');
+        }
     }
 
     public function index()
     {
+       
         if ($this->session->userdata('restuser') == '') {
             redirect('home/login');
         } else {
             $this->load->model("RestModel", "rest_model");
-            $restid = $this->session->userdata('rest_id');
-            $this->rest_model->getDashboardData($restid);
+            $restid =rest_id();
+            $data['statics']=$this->rest_model->getDashboardData($restid);
 
             $uuserid = $this->session->userdata('id_user');
             $permissions = $this->MBooking->restPermissions($restid);
@@ -84,6 +92,8 @@ class Home extends CI_Controller
                 $data['profilecompletionstatus'] = $profilecompletionstatus;
                 $data['firstTimeLogin'] = TRUE;
             }
+            $data['gelary_images'] =  $this->rest_model->getRestGalaryImages(rest_id());
+
             $data['main'] = 'home';
             $data['home'] = 'home';
             $data['total_comments'] =  intval($this->MRestBranch->getCountComments($restid));
@@ -106,7 +116,7 @@ class Home extends CI_Controller
     }
     public function comments()
     {
-        $limit = 20;
+        $limit = 5000;
         $ajax = 0;
         $offset = 0;
         if (isset($_GET['ajax']) && ($_GET['ajax'] != "")) {
@@ -153,7 +163,7 @@ class Home extends CI_Controller
         $data['title'] = (htmlspecialchars($restdata['rest_Name'])) . " - " . $settings['name'];
 
         $data['main'] = 'comments';
-        $data['side_menu'] = array("comments");
+        $data['side_menu'] = array("customer_comments");
         $this->layout->view('comments', $data);
     }
     public function usercommentstatus()
@@ -164,21 +174,21 @@ class Home extends CI_Controller
         $cuisine = $this->MRestBranch->getRestaurantComment($id);
         if ($cuisine['review_Status'] == 1) {
             $this->MRestBranch->deActivateRestComment($id);
-            $msg = 'Comment Deactivated successfully';
+            $msg = lang('comment_deactive');
             returnMsg("success", 'home/comments', $msg);
         } else {
             $this->MRestBranch->activateRestComment($id);
             $this->MGeneral->addUserActivity($cuisine['user_ID'], $cuisine['rest_ID'], "Commented on", 'تم الرفع الصورة ل', $id);
             //  $this->commentsNotification($id, $cuisine['user_ID'], $cuisine['rest_ID'], $cuisine['review_Msg']);
 
-            $msg = 'Comment Activated successfully.';
+            $msg = lang('comment_activeted');
             returnMsg("success", 'home/comments', $msg);
         }
     }
 
     public function userUploads()
     {
-        $limit = 20;
+        $limit = 500;
         $ajax = 0;
         $offset = 0;
         if (isset($_GET['ajax']) && ($_GET['ajax'] != "")) {
@@ -240,15 +250,15 @@ class Home extends CI_Controller
         $permissions = $this->MBooking->restPermissions($restid);
         if ($permissions['accountType'] == 0 && $cuisine['user_ID'] != "") {
 
-            returnMsg("error", "accounts", "'Your current package does not have this service. Please upgrade your package.");
+            returnMsg("error", "accounts", lang('gallry_plan_error'));
         }
 
         if ($cuisine['status'] == 1) {
             $this->MRestBranch->deActivateUserGalleryImage($id);
-            $msg = 'Image Deactivated successfully';
+            $msg = lang('img_deactive_message');
         } else {
             $this->MRestBranch->activateUserGalleryImage($id);
-            $msg = 'Image Activated successfully';
+            $msg = lang('img_active_message');
         }
         $this->MRestBranch->updateRest($rest);
         if (isset($_GET['ref'])) {
@@ -357,6 +367,7 @@ class Home extends CI_Controller
 
     public function login()
     {
+        $this->lang->load('english', 'english');
         $redirect = "";
         if (isset($_GET['redirect']) && ($_GET['redirect'] != "")) {
             $redirect = $_GET['redirect'];
@@ -387,8 +398,7 @@ class Home extends CI_Controller
         $password = ($this->input->post('Password'));
         // var_dump($user,$password);
         $userinfrom = $this->MBooking->memeberAccountStatus($user, $password);
-        //var_dump($userinfrom);
-        //exit;
+       
         $this->load->library('email');
         $config['charset'] = 'utf-8';
         $config['mailtype'] = 'html';
@@ -514,12 +524,25 @@ class Home extends CI_Controller
                 'language' => $_POST['language'],
                 'rest_id' => $rows['rest_id'],
                 'firstlogin' => $firstlog,
-                'logged_in' => TRUE
+                'logged_in' => TRUE,
+                "lang"=>(post('language')==1 ? "arabic" :"english"),
+               
+
             );
             $this->session->set_userdata($user_data);
-            if ($_POST['language'] == 1) {
-                redirect('ar/home');
+            if (isset($_POST['remember_me']) && post('remember_me') == 'on') {
+                setcookie('remember_me_user_name',post('User'));
+                setcookie('remember_me_password',post('Password'));
+                setcookie('remember_me',post('remember_me'));
+               
+                redirect('home');
             } else {
+                setcookie('remember_me_user_name',null);
+                setcookie('remember_me_password',null);
+                setcookie('remember_me',null);
+                unset($_COOKIE['remember_me_user_name']);
+                unset($_COOKIE['remember_me_password']);
+                unset($_COOKIE['remember_me']);
                 redirect('home');
             }
         }
@@ -578,10 +601,10 @@ class Home extends CI_Controller
                     $this->MGeneral->updateProfileCompletionStatus($restid, $uuserid, 4);
                 }
             }
-            returnMsg("success", 'home',  post('rest_Name') . ' Logo  Updated successfully');
+            returnMsg("success", 'home',  post('rest_Name') . lang('logo_updated'));
         } else {
 
-            returnMsg("error", 'home/logo', 'Some error happened Please try again');
+            returnMsg("error", 'home/logo',lang('proccess_error'));
         }
     }
 
@@ -643,9 +666,12 @@ class Home extends CI_Controller
             $data['pagetitle'] = $data['title'] = (htmlspecialchars($restdata['rest_Name'])) . " - " . $settings['name'];
             $data['js'] = 'validate';
             $data['main'] = 'response';
+            $data['title'] = lang('reply');
+            $data['side_menu'] = array("customer_comments");
+
             $this->layout->view('response', $data);
         } else {
-            returnMsg("success", "accounts", 'You cannot send response to your customer in this package. Please click here to upgrade your package');
+            returnMsg("error", "accounts", lang('comment_reply_plan'));
         }
     }
 
@@ -687,21 +713,21 @@ class Home extends CI_Controller
                 $name = $user_info['user_FullName'];
             }
             $data['name'] = $name;
-            $data['title'] = 'comment response';
+            $data['title'] = lang('comments_reply');
             $data['restname'] = stripslashes($rest['rest_Name']);
             $msg = $this->load->view('mails/restResponse', $data, true);
-            $subject = stripslashes($rest['rest_Name']) . " replied to your comment on sufrati.com";
+            $subject = stripslashes($rest['rest_Name']) . " ".lang('repy_subject');
             $this->email->from("info@azooma.co", "Sufrati.com");
             $this->email->to($user_info['user_Email']);
             $this->email->bcc($this->config->item("teamemails"));
             $this->email->subject($subject);
             $this->email->message($msg);
             $this->email->send();
-            $msg = 'Your email has been sent to User.';
+            $msg = lang('email_r_sent');
             returnMsg("success", 'home/comments', $msg);
         } else {
 
-            $msg = 'Some error occurred, Please try again.';
+            $msg = lang('proccess_error');
             returnMsg("error", 'home/comments', $msg);
         }
         if (isset($_POST['ref'])) {
@@ -820,8 +846,9 @@ class Home extends CI_Controller
 
     public function restpassword()
     {
-        if ($_POST['user_email'] == "" || $_POST['rest_name'] == "") {
-            $this->session->set_flashdata('error', 'Please Enter Restaurant Name and Your Email Address.');
+        
+        if ($_POST['user_email'] == "" || $_POST['user_name'] == "") {
+            $this->session->set_flashdata('error', 'Please Enter user Name and Your Email Address.');
             redirect("home/forgot");
         }
         $this->load->library('email');
@@ -832,18 +859,19 @@ class Home extends CI_Controller
         $data['settings'] = $settings = $this->MGeneral->getSettings();
         $data['sitename'] = $this->MGeneral->getSiteName();
         $data['logo'] = $logo = $this->MGeneral->getLogo();
-        $rest_name = trim($_POST['rest_name']);
+        $rest_name = trim(post('rest_name'));
         //        $rest_data=$this->MGeneral->getRestByName($rest_name);
         //        if(empty($rest_data) || ! is_array($rest_data)){
         //            $this->session->set_flashdata('error', 'Restaurant Name is not correct. Please enter correct.');
         //            redirect("home/forgot");
         //        }
-        $restid = $_POST['rest_id_hdn'];
-        if (empty($restid)) {
-            $this->session->set_flashdata('error', 'Restaurant Name is not correct. Please enter correct.');
+        $rest_info = Smart::get_table_info("booking_management","*",array("user_name"=>post("user_name")),false);
+        if (empty($rest_info)) {
+            $this->session->set_flashdata('error', 'User Name is not correct. Please enter correct.');
             redirect("home/forgot");
         }
-        $admindata = $this->MGeneral->getAdminDetails($_POST['user_email'], $restid);
+        $rest_id=$rest_info->rest_id;
+        $admindata = $this->MGeneral->getAdminDetails($_POST['user_email'], $rest_id);
         if (empty($admindata)) {
             $this->session->set_flashdata('error', 'Your email is not correct. Please enter correct email.');
             redirect("home/forgot");

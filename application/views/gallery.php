@@ -3,9 +3,9 @@
 <div class="pt-2">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('gallery'); ?>">Photos</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('gallery'); ?>"><?=lang('photo_gallery')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">Images </li>
+        <li class="active"><?=lang('restaurant_photos')?> </li>
 
     </ul>
 </div>
@@ -25,9 +25,9 @@ echo message_box('success');
 
                 </h5>
                 <span>
-                    <a href="<?php echo base_url('gallery/image?rest=' . $rest['rest_ID']); ?>" title="" class="btn btn-sm btn-danger">Add New Photo</a>
+                    <a href="<?php echo base_url('gallery/image?rest=' . $rest['rest_ID']); ?>" title="" class="btn btn-sm btn-danger"><?=lang('add_new_photo')?></a>
 
-                    <a target="_blank" href="<?php echo $this->config->item('sa_url') . 'rest/' . $rest['seo_url'] . '/gallery'; ?>" title="" class="btn btn-sm d-none btn-primary">Preview</a>
+                    <a target="_blank" href="<?php echo $this->config->item('sa_url') . 'rest/' . $rest['seo_url'] . '/gallery'; ?>" title="" class="btn btn-sm d-none btn-primary"> <?=lang('preview')?></a>
                 </span>
             </div>
             <div id="results" class=" in accordion-inner table-responsive">
@@ -41,13 +41,13 @@ echo message_box('success');
                     <table class="table table-bordered table-striped sufrati-backend-table" id="basic-1">
                         <thead>
                             <th class="span4">
-                                Preview
+                                 <?=lang('preview')?>
                             </th>
                             <th class="span4">
-                                Title
+                                <?=lang('title')?>
                             </th>
                             <th>
-                                Actions
+                                 <?=lang('actions')?>
                             </th>
                         </thead>
                         <tbody>
@@ -56,7 +56,7 @@ echo message_box('success');
                             ?>
                                 <tr>
                                     <td>
-                                        <img src="http://uploads.azooma.co/Gallery/thumb/<?php echo $image['image_full']; ?>" />
+                                        <img src="<?=app_files_url()?>Gallery/thumb/<?php echo $image['image_full']; ?>" />
                                     </td>
                                     <td>
                                         <?php echo $image['title'] . ' - ' . $image['title_ar']; ?>
@@ -68,7 +68,7 @@ echo message_box('success');
                                                 <line x1="3" y1="22" x2="21" y2="22"></line>
                                             </svg>
                                         </a><br />
-                                        <a class="p-1 border mx-1 btn btn-sm  btn-danger cofirm-delete-btn" link="<?php echo base_url('gallery/delete/' . $image['image_ID'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="Delete Image">
+                                        <a class="p-1 border mx-1 btn btn-sm  btn-danger cofirm-delete-btn" link="<?php echo base_url('gallery/delete/' . $image['image_ID'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="<?=lang('delete')?>">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2">
                                                 <polyline points="3 6 5 6 21 6"></polyline>
                                                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -85,7 +85,7 @@ echo message_box('success');
                                                 </svg>
                                             </a>
                                         <?php } else { ?>
-                                            <a class="p-1 border mx-1 btn btn-sm  btn-info" href="<?php echo base_url('gallery/unsetFeaturedImage/' . $image['image_ID'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="Profile Photo" onclick="return confirm('Do You Want to Remove Profile Photo?')">
+                                            <a class="p-1 border mx-1 btn btn-sm  btn-info" href="<?php echo base_url('gallery/unsetFeaturedImage/' . $image['image_ID'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="Profile Photo" onclick="return confirm('<?=lang('confirm_remove_photo')?>')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-camera-off">
                                                     <line x1="1" y1="1" x2="23" y2="23"></line>
                                                     <path d="M21 21H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h3m3-3h6l2 3h4a2 2 0 0 1 2 2v9.34m-7.72-2.06a4 4 0 1 1-5.56-5.56"></path>

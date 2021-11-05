@@ -162,7 +162,7 @@ class Personalizedmailer {
 	function sendtolist() {
 		global $argv;
 		$clioptions = array();
-		if (in_array('--silent', $argv)) {	
+		if (is_array( $argv) && in_array('--silent', $argv)) {	
 			$this->config['silent'] = $clioptions['silent'];					
 		}
 	

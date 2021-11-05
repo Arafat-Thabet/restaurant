@@ -17,7 +17,7 @@ class Video extends MY_Controller {
 
     public function index()
     {
-        $limit=20;
+        $limit=500;
         $ajax=0;
         $offset=0;
         if(isset($_GET['ajax'])&&($_GET['ajax']!="")){
@@ -54,7 +54,7 @@ class Video extends MY_Controller {
         $config['total_rows']=$data['total']=$this->MVideo->getTotalVideos($rest,0);
         $this->pagination->initialize($config);
         
-        $data['pagetitle'] = $data['title'] = (htmlspecialchars($restdata['rest_Name']))." - Videos ";
+        $data['pagetitle'] = $data['title'] = (htmlspecialchars($restdata['rest_Name']))." -  ".lang('videos');
         
         $data['videos']=  $this->MVideo->getAllVideos($rest,0,$limit,$offset);
         
@@ -78,7 +78,7 @@ class Video extends MY_Controller {
             $data['video']=$this->MVideo->getRestVideo($id);
             $data['title']=$data['pagetitle']=$data['video']['name_en'];
         }else{
-            $data['title']=$data['pagetitle']='New Video - '.(htmlspecialchars($restdata['rest_Name']));
+            $data['title']=$data['pagetitle']=lang('new_video').' - '.(htmlspecialchars($restdata['rest_Name']));
         }
         
         if($newFlag){
@@ -94,12 +94,13 @@ class Video extends MY_Controller {
                      $availableVideos=300;
                  }
                  if( $totalVideos >= $availableVideos ){
-                     $this->session->set_flashdata('error', 'You can only add '.$availableVideos.' Video(s) in this package. Please upgrade your package.');
-                    redirect('accounts');
-                 }
+                     $this->session->set_flashdata('error',lang('you_can_add'). ' '.$availableVideos.' '.lang('video_plan_error'));
+                     returnMsg('error','accounts',lang('you_can_add'). ' '.$availableVideos.' '.lang('video_plan_error'));
+                    }
              }else{
-                 $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-                redirect('accounts');
+                 $this->session->set_flashdata('error',lang('gallry_plan_error'));
+                 returnMsg('error','accounts',lang('gallry_plan_error'));
+               // redirect('accounts');
              }
         }
         
@@ -119,18 +120,18 @@ class Video extends MY_Controller {
                 $video_id=$this->input->post('id');
                 $this->MVideo->updateRestVideo();
                 $this->MRestBranch->updateRest($rest);
-                $this->MGeneral->addActivity('We have Updated our video.',$video_id);         
-                returnMsg("success","video",'Video updated successfully');
+                $this->MGeneral->addActivity(lang('video_update_log'),$video_id);         
+                returnMsg("success","video",lang('video_update_success'));
 
             }else{
                 $video_id=$this->MVideo->addRestVideo();
                 $this->MRestBranch->updateRest($rest);
              
-                $this->MGeneral->addActivity('We have added a New video.',$video_id);
-                returnMsg("success","video",'Video added successfully');
+                $this->MGeneral->addActivity(lang('video_added_log'),$video_id);
+                returnMsg("success","video",lang('video_added_success'));
             }
         }else{
-            returnMsg("error","video",'Some error happened Please try again');
+            returnMsg("error","video",lang('proccess_error'));
 
         }
     }
@@ -141,10 +142,10 @@ class Video extends MY_Controller {
         $this->MVideo->changeStatusRestVideo($id);
         $this->MRestBranch->updateRest($rest);
         if($offer['status']==1){    
-            returnMsg("success","video",'Video Deactivated successfully');
+            returnMsg("success","video",lang('video_deactived_msg'));
 
         }else{
-            returnMsg("success","video",'Video Activated successfully');
+            returnMsg("success","video",lang('video_actived_msg'));
 
         }
     }

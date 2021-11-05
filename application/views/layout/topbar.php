@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Lang;
 ?>
-<body>
+<body class="dash-body <?=(sys_lang()=="arabic" ?"rtl" :"")?> <?=(isset($_COOKIE['darkMode']) && $_COOKIE['darkMode']==1 ? "dark-only" :"")?>">
     <!-- tap on top starts-->
     <div class="tap-top"><i data-feather="chevrons-up"></i></div>
     <!-- tap on tap ends-->
@@ -35,15 +35,15 @@ use Illuminate\Support\Facades\Lang;
                         <li class="language-nav">
                             <div class="translate_wrapper">
                                 <div class="current_lang">
-                                    <div class="lang"><i class="flag-icon flag-icon-us"></i><span class="lang-txt">EN </span></div>
+                                    <div class="lang"><?=sys_lang()=="arabic" ? '<i class="flag-icon flag-icon-sa"></i>' :'<i class="flag-icon flag-icon-us"></i>'?><span class="lang-txt"><?=sys_lang()=="arabic" ? "AR" :"EN"?> </span></div>
                                 </div>
                                 <div class="more_lang">
-                                    <div class="lang selected" data-value="en"><i class="flag-icon flag-icon-us"></i><span class="lang-txt"><?=lang('English')?><span> (US)</span></span></div>
-                                    <div class="lang" data-value="sa"><i class="flag-icon flag-icon-sa"></i><span class="lang-txt"><?=lang('arabic')?> <span> (AR)</span></span></div>
+                                    <div class="lang <?=sys_lang()=="english" ?"selected":"" ?>" data-value="en"><a class="p-0" href="<?=base_url("home/set_language/english")?>"><i class="flag-icon flag-icon-us"></i><span class="lang-txt"><?=lang('english')?><span></span></span></a></div>
+                                    <div class="lang <?=sys_lang()=="arabic" ?"selected":"" ?>" data-value="sa"><a class="p-0"  href="<?=base_url("home/set_language/arabic")?>"><i class="flag-icon flag-icon-sa"></i><span class="lang-txt"><?=lang('arabic')?> <span> </span></span></a></div>
                                 </div>
                             </div>
                         </li>
-                        <li> <span class="header-search"><i data-feather="search"></i></span></li>
+                        <li class="d-none"> <span class="header-search"><i data-feather="search"></i></span></li>
                         <li class="onhover-dropdown">
                             <div class="notification-box"><i data-feather="bell"> </i><span class="badge rounded-pill badge-secondary">4 </span></div>
                             <ul class="notification-dropdown onhover-show-div">
@@ -67,7 +67,12 @@ use Illuminate\Support\Facades\Lang;
                         </li>
                
                         <li>
-                            <div class="mode"><i class="fa fa-moon-o"></i></div>
+                            <div class="mode <?=(isset($_COOKIE['darkMode']) && $_COOKIE['darkMode']==1 ? "selected" :"")?>">
+                            
+                            <?=(isset($_COOKIE['darkMode']) && $_COOKIE['darkMode']==1 ? '<i class="fa fa-lightbulb-o"></i>' :'<i class="fa fa-moon-o"></i>')?>
+                            
+                        
+                        </div>
                         </li>
                  
                         <li class="maximize"><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
@@ -79,10 +84,11 @@ use Illuminate\Support\Facades\Lang;
                             </div>
                             <ul class="profile-dropdown onhover-show-div">
                                 <li><a href="<?php echo base_url('settings'); ?>"><i data-feather="settings"></i><span><?=lang('my_account')?> </span></a></li>
-    
+                                
                                 <li><a href="<?php echo base_url('home/logo'); ?>"><i data-feather="file-text"></i><span><?=lang("change_logo")?></span></a></li>
+
                                 <li><a href="<?php echo base_url('home/password'); ?>"><i data-feather="edit-2"></i><span><?=lang('change_password')?></span></a></li>
-                                <li><a href="<?=base_url("home/logout")?>"><i data-feather="log-in"> </i><span>Log out</span></a></li>
+                                <li><a href="<?=base_url("home/logout")?>"><i data-feather="log-in"> </i><span><?=lang('log_out')?></span></a></li>
                             </ul>
                         </li>
                     </ul>

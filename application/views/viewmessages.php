@@ -1,43 +1,34 @@
 <link href="<?=base_url(css_path())?>/datatable/datatable.css" rel="stylesheet">
-
+<?php
+echo message_box('error');
+echo message_box('success');
+?>
 <section id="top-banner">
 
     <ul class="breadcrumb pt-2">
         <li>
-            <a href="<?php echo site_url(); ?>">Home</a> <span class="divider">/</span>
+            <a href="<?php echo base_url(); ?>"><?=lang('Dashboard')?></a> <span class="divider">/</span>
         </li>
         <li>
-            <a href="<?php echo site_url('mydiners'); ?>">My Diner</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('mydiners'); ?>"><?=lang('my_diner')?></a> <span class="divider">/</span>
         </li>
-        <li class="active"> Messages </li>
+        <li class="active"> <?=lang('messages')?> </li>
     </ul>
     <div class="row-fluid spacer card">
         <article class="span12 accordion-group card-body">
-            <h5 >All Messages to Diners </h5>
+            <h5 ><?=lang('all_msg2diners')?> </h5>
             <div id="usercomments" class="">
-                <?php
-                if ($this->session->flashdata('error')) {
-                    echo '<br /><div class="alert alert-error"><a class="close" data-dismiss="alert">x</a><strong>' . $this->session->flashdata('error') . '</strong></div>';
-                }
-                if ($this->session->flashdata('message')) {
-                    echo '<br /><div class="alert alert-success"><a class="close" data-dismiss="alert">x</a><strong>' . $this->session->flashdata('message') . '</strong></div>';
-                }
-                ?>
+            <div class="table-responsive">
 
-                <?php
-                if (count($total) > 0) {
-                    echo $this->pagination->create_links();
-                }
-                ?> 
                 <table class="table table-bordered table-striped" id="basic-1">
                     <thead>
                         <tr>
-                            <th>Subject</th>
-                            <th>Audience</th>
-                            <th>Status</th>
-                            <th>Total</th>
-                            <th>Date</th>
-                            <th width="105px">Action</th>
+                            <th><?=lang('subject')?></th>
+                            <th><?=lang('audience')?></th>
+                            <th><?=lang('Status')?></th>
+                            <th><?=lang('Total')?></th>
+                            <th><?=lang('date')?></th>
+                            <th width="105px"> <?=lang('action')?></th>
                     </thead>
                     <tbody>
                         <?php
@@ -72,11 +63,11 @@
                                     <td><?php echo $message['total_receiver']; ?></td>
                                     <td><?php echo date("d/m/Y",  strtotime($message['date'])); ?></td>
                                     <td  class="d-flex justify-content-around">
-                                        <a class="btn btn-sm btn-primary" title="View" target="_blank" href="<?php echo site_url('mydiners/view/' . $message['id']); ?>"  rel="tooltip" data-original-title="<?php echo $message['subject'];?>">
+                                        <a class="btn btn-sm btn-primary" title="View" target="_blank" href="<?php echo base_url('mydiners/view/' . $message['id']); ?>"  rel="tooltip" data-original-title="<?php echo $message['subject'];?>">
                                             <i class="fa fa-eye"> </i> 
                                         </a>
                                         <?php if($message['status']==0){ ?>
-                                        <a class="btn btn-sm  btn-danger mx-1" title="Edit" href="<?php echo site_url('mydiners/edit/' . $message['id']); ?>"  rel="tooltip" data-original-title="<?php echo $message['subject'];?>">
+                                        <a class="btn btn-sm  btn-danger mx-1" title="Edit" href="<?php echo base_url('mydiners/edit/' . $message['id']); ?>"  rel="tooltip" data-original-title="<?php echo $message['subject'];?>">
                                             <i class="fa fa-edit"> </i> 
                                         </a>
                                         <?php } ?>
@@ -92,6 +83,7 @@
                         <?php } ?>                  
                     </tbody>
                 </table>
+            </div>
             </div>
 
             <?php

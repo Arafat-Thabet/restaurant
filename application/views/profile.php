@@ -1,9 +1,9 @@
 <div class="pt-2 text-start">
     <ul class="breadcrumb">
     <li class="breadcrumb-item">
-        <a href="<?php echo site_url('home'); ?>"><?=lang('home')?></a> <span class="divider">/</span>
+        <a href="<?php echo base_url('home'); ?>"><?=lang('Dashboard')?></a> <span class="divider">/</span>
     </li>
-    <li class="active"><?=lang('rest_info')?> </li>
+    <li class="active"><?=lang('profile_page')?> </li>
 </ul>
 </div>
 
@@ -261,7 +261,7 @@
                                         <div class="col-md-12">
                                             <textarea class="form-control" onkeyup="countChar(this);" name="rest_Description" id="restDescription" rows="5" placeholder="Restaurant Description"><?php if (isset($rest) && ($rest['rest_Description'] != "")) echo stripcslashes($rest['rest_Description']); ?></textarea>
                                             <span class="badge badge-info" id="charNum"><?php echo $allowed_chars; ?></span>
-                                            <div id="count-message" class="hidden">Maximum <?php echo $allowed_chars; ?> Characters </div>
+                                            <div id="count-message" class="hidden"><?=lang('maximum')?> <?php echo $allowed_chars; ?> <?=lang('characters')?> </div>
                                         </div>
                                     </div>
                                 </div>
@@ -271,7 +271,7 @@
                                         <div class="col-md-12">
                                             <textarea class="form-control" onkeyup="countCharAr(this);" name="rest_Description_Ar" id="rest_Description_Ar" rows="5" dir="rtl" placeholder="Restaurant Description Arabic"><?php if (isset($rest) && ($rest['rest_Description'] != "")) echo stripcslashes($rest['rest_Description_Ar']); ?></textarea>
                                             <span class="badge badge-info" id="charNumAr"><?php echo $allowed_chars; ?></span>
-                                            <div id="count-message-ar" class="hidden">Maximum <?php echo $allowed_chars; ?> Characters </div>
+                                            <div id="count-message-ar" class="hidden"><?=lang('maximum')?> <?php echo $allowed_chars; ?> <?=lang('characters')?> </div>
                                         </div>
                                     </div>
                                 </div>
@@ -297,7 +297,7 @@
                     <section>
                         <h4 class="my-3">
                             
-                            <?=lang('open_hours_day')?><
+                            <?=lang('open_hours_day')?>
                         </h4>
                         <div class="row">
                             <div class="col-md-12">
@@ -774,8 +774,8 @@
                     <div class="form-group row my-4">
                         <div class="col-sm-12 text-end">
                         <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER'];
-                                        else echo site_url(); ?>" class="btn btn-default" title="Cancel Changes">Cancel</a>
-                            <input type="submit" name="submit" value="Save" class="btn btn-danger" />
+                                        else echo site_url(); ?>" class="btn btn-default" title="Cancel Changes"><?=lang('cancel')?></a>
+                            <input type="submit" name="submit" value="<?=lang('save')?>" class="btn btn-danger" />
                       
                         </div>
                         <?php
@@ -792,7 +792,7 @@
     </div>
 </section>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>js/restform.js"></script>
+<script type="text/javascripts" src="<?php echo base_url(); ?>js/restform.js"></script>
 <script>
     var allowed_chars = '<?php echo $allowed_chars; ?>';
 
@@ -820,7 +820,7 @@
 </script>
 <script>
     $(document).ready(function() {
-        $(".select2").select2();
+        $(".select2").select2({dir:"rtl"});
         /*  $(".select2-tag").select2({
             tags: "true",
             allowClear: true,

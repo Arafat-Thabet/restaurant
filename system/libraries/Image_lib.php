@@ -675,10 +675,15 @@ class CI_Image_lib {
 	public function resize()
 	{
 		$protocol ='image_process_gd';
-		if($this->image_library === 'gd2'){
+		if( $this->image_library === 'gd2'){
 			$protocol ='image_process_gd';
 		}
 		else{
+			if(empty($this->image_library))
+			{$this->image_library ='gd';
+			//	var_dump($this->image_library);exit;
+			
+			}
 			$protocol ='image_process_'.$this->image_library;
 		}
 		return $this->$protocol('resize');

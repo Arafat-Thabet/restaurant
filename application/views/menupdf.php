@@ -2,9 +2,9 @@
 <div class="pt-2">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('menus'); ?>">Menus</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('menus'); ?>"><?=lang('menu_management')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">Pdf Menus </li>
+        <li class="active"> <?=lang('pdf_menus')?></li>
 
     </ul>
 </div>
@@ -19,7 +19,7 @@ echo message_box('success');
         <div class="text-end mb-3">
         <h4 class="pull-start">
             
-                Total Pdf Menus (<?php echo $total; ?>) 
+                <?=lang('total_pdf_menus')?> (<?php echo $total; ?>) 
             
         </h4>
         <a href="<?php echo base_url('menus/formpdf?rest=' . $rest['rest_ID']); ?>" title="" class="btn btn-danger ">Add New Pdf Menu</a>
@@ -32,13 +32,13 @@ echo message_box('success');
                 <table class="table table-bordered table-striped sufrati-backend-table" id="basic-1">
                     <thead>
                         <th class="span4">
-                            Title
+                             <?=lang('title')?>
                         </th>
                         <th class="span4">
-                            Menu
+                            <?=lang('Menu')?>
                         </th>
                         <th>
-                            Actions
+                             <?=lang('actions')?>
                         </th>
                     </thead>
                     <tbody>
@@ -50,8 +50,8 @@ echo message_box('success');
                                     <?php echo $menu['title'] . ' - ' . $menu['title_ar']; ?>
                                 </td>
                                 <td>
-                                    <a target="_blank" href="http://uploads.azooma.co/images/menuItem/<?php echo $menu['menu']; ?>">View English PDF</a> <br />
-                                    <a target="_blank" href="http://uploads.azooma.co/images/menuItem/<?php echo $menu['menu_ar']; ?>">View Arabic PDF</a>
+                                    <a target="_blank" href="<?php echo app_files_url().menu_pdf_path().$menu['menu']; ?>"><?=lang('view_english_pdf')?></a> <br />
+                                    <a target="_blank" href="<?php echo app_files_url().menu_pdf_path(). $menu['menu_ar']; ?>"><?=lang('view_arabic_pdf')?></a>
                                 </td>
                                 <td>
 

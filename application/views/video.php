@@ -7,9 +7,9 @@ echo message_box('success');
 <div class="pt-2">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('video'); ?>">Restaurant Videos</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('video'); ?>"><?=lang('restaurant_videos')?></a> <span class="divider">/</span>
         </li>
-        <li class="active">Videos </li>
+        <li class="active"><?=lang('videos')?> </li>
     </ul>
 </div>
 <section class="card">
@@ -29,7 +29,7 @@ echo message_box('success');
                     <?php echo $pagetitle; ?>
 
                 </h4>
-                <a href="<?php echo base_url('video/form?rest=' . $rest['rest_ID']); ?>" title="Add new Offer" class="btn btn-danger ">Add New Video</a>
+                <a href="<?php echo base_url('video/form?rest=' . $rest['rest_ID']); ?>" title="<?=lang('add_new_video')?>" class="btn btn-danger "><?=lang('add_new_video')?></a>
                 <a target="_blank" href="<?php echo $this->config->item('sa_url') . 'rest/' . $rest['seo_url'] . '/gallery#profile-nav'; ?>" title="Preview" class="btn btn-inverse d-none">Preview</a>
 
             </div>
@@ -40,20 +40,20 @@ echo message_box('success');
                 <?php
                 if (count($videos) > 0) {
                 ?>
-
+                        <div class="table-table-responsive">
                     <table class="table table-bordered table-striped sufrati-backend-table" id="basic-1">
                         <thead>
                             <th class="span4">
-                                Video Title
+                                 <?=lang('video_title')?>
                             </th>
                             <th class="span3">
-                                Description
+                                <?=lang('description')?>
                             </th>
                             <th class="span3">
-                                Preview
+                                <?=lang('preview')?>
                             </th>
                             <th width="20%">
-                                Actions
+                                    <?=lang('actions')?>
                             </th>
                         </thead>
                         <tbody>
@@ -86,10 +86,10 @@ echo message_box('success');
                                     </td>
                                     <td>
 
-                                        <a class="btn btn-sm btn-primary" title="<?=lang('edit')?>" href="<?php echo base_url('video/form/' . $video['id'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="Update Video">
+                                        <a class="btn btn-sm btn-primary" title="<?=lang('edit')?>" href="<?php echo base_url('video/form/' . $video['id'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" >
                                             <i class="fa fa-edit"></i> 
                                         </a>
-                                        <a class="btn btn-sm <?php echo $video['status'] == 1 ? "btn-danger " : "btn-primary "; ?> " href="<?php echo base_url('video/status/' . $video['id'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="<?php echo $video['status'] == 1 ? "Deactivate " : "Activate "; ?> Video">
+                                        <a class="btn btn-sm <?php echo $video['status'] == 1 ? "btn-danger " : "btn-primary "; ?> " href="<?php echo base_url('video/status/' . $video['id'] . '?rest=' . $rest['rest_ID']); ?>" rel="tooltip" title="<?php echo $video['status'] == 1 ? lang('deactivate') : lang('activate'); ?> <?=lang('Video')?>" >
                                             <?php
                                             if ($video['status'] == 1) {
                                             ?>
@@ -108,6 +108,7 @@ echo message_box('success');
                             ?>
                         </tbody>
                     </table>
+                    </div>
                 <?php
                 }
                 ?>

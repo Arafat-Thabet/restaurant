@@ -103,7 +103,7 @@ class Offers extends MY_Controller {
             $data['restoffercategory'] = $this->MRestBranch->getOfferCategory($id);
             $data['restofferbranches'] = $this->MRestBranch->getOfferBranch($id);
         } else {
-            $data['title'] = $data['pagetitle'] = 'New Offer';
+            $data['title'] = $data['pagetitle'] = lang('new_offer');
         }
 
         if ($newFlag) {
@@ -119,12 +119,12 @@ class Offers extends MY_Controller {
                     $availableOffers = 30;
                 }
                 if ($totalOffers >= $availableOffers) {
-                    $this->session->set_flashdata('error', 'You can only add ' . $availableOffers . ' offer in this package. Please upgrade your package.');
-                   redirect('accounts');
+                    $this->session->set_flashdata('error', lang('you_can_add').' ' . $availableOffers . ' '.lang('offer_plan_error'));
+                    returnMsg('error','accounts',lang('you_can_add').' ' . $availableOffers . ' '.lang('offer_plan_error'));
                 }
             } else {
-                $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-                redirect('accounts');
+                $this->session->set_flashdata('error', lang('gallry_plan_error'));
+               returnMsg('error','accounts',lang('gallry_plan_error'));
             }
         }
 
@@ -137,6 +137,7 @@ class Offers extends MY_Controller {
     }
 
     function save($option = "") {
+        
         $rest = $this->input->post('rest_ID');
         $rest = $restid = $this->session->userdata('rest_id');
         $restaurant = $restdata = $this->MGeneral->getRest($restid, false, true);
@@ -157,23 +158,28 @@ class Offers extends MY_Controller {
                         $availableOffers = 30;
                     }
                     if ($totalOffers >= $availableOffers) {
-                        $this->session->set_flashdata('error', 'You can only add ' . $availableOffers . ' offer in this package. Please upgrade your package.');
-                       redirect('accounts');
+                        $this->session->set_flashdata('error',  lang('you_can_add').' ' . $availableOffers . ' '.lang('offer_plan_error'));
+                      // redirect('accounts');
+                      returnMsg('error','accounts',lang('you_can_add').' ' . $availableOffers . ' '.lang('offer_plan_error'));
                     }
                 } else {
-                    $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-                    redirect('accounts');
+                    $this->session->set_flashdata('error', lang('gallry_plan_error'));
+                    //redirect('accounts');
+                   returnMsg('error','accounts',lang('gallry_plan_error'));
+
                 }
             }
 
             $this->load->library('images');
+            $id=$this->input->post('id');
             if ($this->input->post('id')) {
                 if (is_uploaded_file($_FILES['image']['tmp_name'])) {
                     $image = $this->upload_image('image', $this->config->item('upload_url') . 'images/offers/');
                     list($width, $height, $type, $attr) = getimagesize($this->config->item('upload_url') . 'images/offers/' . $image);
                     if ($width < 200 || $height < 200) {
                    
-                        returnMsg("error","offers/form?rest=" . $rest,'الصورة صغيرة جدا. يرجى تحميل الحجم الصحيح (200 × 200)  بكسل ');
+                      //  returnMsg("error","offers/form?rest=" . $rest,'الصورة صغيرة جدا. يرجى تحميل الحجم الصحيح (200 × 200)  بكسل ');
+                        returnMsg('error',"offers/form/$id?rest=" . $rest,lang('img_upload_size_error'));
 
                     }
                     if (($width > 800) || ($height > 500)) {
@@ -189,8 +195,7 @@ class Offers extends MY_Controller {
                     $width = $height = 0;
                     list($width, $height, $type, $attr) = getimagesize($this->config->item('upload_url') . 'images/offers/' . $imageAr);
                     if ($width < 200 || $height < 200) {
-                        $this->session->set_flashdata('error', 'الصورة صغيرة جدا. يرجى تحميل الحجم الصحيح (200 × 200)  بكسل ');
-                        redirect("offers/form?rest=" . $rest);
+                        returnMsg('error',"offers/form/$id?rest=" . $rest,lang('img_upload_size_error'));
                     }
                     if (($width > 800) || ($height > 500)) {
                         $this->images->resize($this->config->item('upload_url') . 'images/offers/' . $imageAr, 800, 500, $this->config->item('upload_url') . 'images/offers/' . $imageAr);
@@ -203,9 +208,9 @@ class Offers extends MY_Controller {
                 $offer_id = $this->input->post('id');
                 $this->MRestBranch->updateOffer($image, $imageAr);
                 $this->MRestBranch->updateRest($rest);
-                $this->MGeneral->addActivity('We have Updated our Offer.', $offer_id);
+                $this->MGeneral->addActivity(lang('offer_update_log'), $offer_id);
        
-                returnMsg("success",'offers','Offer updated successfully');
+                returnMsg("success",'offers',lang('offer_update_success'));
             } else {
                 $image = $imageAr = "";
                 if (is_uploaded_file($_FILES['image']['tmp_name'])) {
@@ -220,14 +225,14 @@ class Offers extends MY_Controller {
                 }
                 $offer_id = $this->MRestBranch->addOffer($image, $imageAr);
                 $this->MRestBranch->updateRest($rest);
-                $this->MGeneral->addActivity('We have Added a New Offer.', $offer_id);
+                $this->MGeneral->addActivity(lang('offer_add_log'), $offer_id);
               
-                returnMsg("success","offers",'Offer added successfully');
+                returnMsg("success","offers",lang('offer_add_success'));
 
             }
         } else {
           
-            returnMsg("error","offers",'Some error happened Please try again');
+            returnMsg("error","offers",lang('proccess_error'));
 
         }
     }
@@ -244,21 +249,22 @@ class Offers extends MY_Controller {
         $offer = $this->MRestBranch->getOffer($id);
         $this->MRestBranch->changeOfferStatus($id);
         if ($offer['status'] == 1) {
-            returnMsg("success",'offers', 'Offer Deactivated successfully');
+            returnMsg("success",'offers',lang('offer_deactivaed'));
 
         } else {
-            returnMsg("success",'offers', 'Offer Activated successfully');
+            returnMsg("success",'offers', lang('offer_deactivaed'));
         }
     }
 
     function delete($id = 0) {
+      
         $rest = $restid = $this->session->userdata('rest_id');
         $uuserid = $this->session->userdata('id_user');
         $offer = $this->MRestBranch->getOffer($id);
         $this->MRestBranch->deleteOffer($id);
         $this->MRestBranch->updateRest($rest);
      
-        returnMsg("success",'offers', 'Offer deleted successfully');
+        returnMsg("success",'offers', lang('offer_deleted'));
 
     }
 
@@ -266,8 +272,13 @@ class Offers extends MY_Controller {
         $uploadDir = $dir;
         if ($_FILES[$name]['name'] != '' && $_FILES[$name]['name'] != 'none') {
             $filename = $_FILES[$name]['name'];
-            $filename = str_replace(' ', '_', $filename);
-            $uploadFile_1 = uniqid('sufrati') . $filename;
+        
+            $rand = rand(0, 10000 - 1);
+            $date = date('YmdHis');
+            $file_name = $_FILES[$name]['name'];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $new_filename = $rand . $date . "." . $file_ext;
+            $uploadFile_1 = uniqid('sufrati') . $new_filename;
             $uploadFile1 = $uploadDir . $uploadFile_1;
             $fileName = $_FILES[$name]['name'];
             if (move_uploaded_file($_FILES[$name]['tmp_name'], $uploadFile1))

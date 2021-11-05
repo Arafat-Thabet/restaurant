@@ -1,10 +1,10 @@
 <div class="breadcrumb-div">
 <ul class="breadcrumb">
 <li  class="breadcrumb-item">
-<a href="<?php echo base_url();?>"><?=lang('home')?></a> <span class="divider">/</span>
+<a href="<?php echo base_url();?>"><?=lang('Dashboard')?></a> <span class="divider">/</span>
 </li>
 <li  class="breadcrumb-item">
-<a href="<?php echo base_url('branches');?>"><?=lang('Branches')?></a> <span class="divider">/</span>
+<a href="<?php echo base_url('branches');?>"><?=lang('branches_locations')?></a> <span class="divider">/</span>
 </li>
 <li class="active"><?php echo (htmlspecialchars($title)); ?> </li>
 </ul>

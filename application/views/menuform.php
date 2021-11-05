@@ -1,20 +1,20 @@
 <div class="pt-2">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo site_url('menus'); ?>">Menus</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('menus'); ?>"><?=lang('menu_management')?></a> <span class="divider">/</span>
         </li>
         <?php
         if (isset($menu)) {
         ?>
-            <li class="active">Menu Type </li>
+            <li class="active"><?=lang('menu_type')?> </li>
         <?php }
         if (isset($category)) {
         ?>
-            <li class="active">Menu Category </li>
+            <li class="active"><?=lang('menu_category')?></li>
         <?php }
         if (isset($item)) {
         ?>
-            <li class="active">Menu Item </li>
+            <li class="active"><?=lang('menu_item')?> </li>
         <?php } ?>
 
     </ul>
@@ -34,19 +34,19 @@ echo message_box('success');
                 <?php
                 if (isset($menu)) {
                 ?>
-                    <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo site_url('menus/save/menu'); ?>">
+                    <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo base_url('menus/save/menu'); ?>">
                      
 
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="cat_name">Menu Type Name</label>
+                                <label class="col-md-3 control-label" for="cat_name"><?=lang('m_type_name')?></label>
                                 <div class="col-md-9">
-                                    <input type="text" name="menu_name" class="form-control" required id="menu_name" placeholder="Menu Type Name" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['menu_name'])) . '"' : ""; ?> />
+                                    <input type="text" name="menu_name" class="form-control" required id="menu_name" placeholder="<?=lang('m_type_name')?>" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['menu_name'])) . '"' : ""; ?> />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="cat_name_ar">Menu Type Name Arabic</label>
+                                <label class="col-md-3 control-label" for="cat_name_ar"><?=lang('m_type_name_ar')?></label>
                                 <div class="col-md-9">
-                                    <input type="text" name="menu_name_ar" id="menu_name_ar" class="form-control" required placeholder="Menu Type Name Arabic" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['menu_name_ar'])) . '"' : ""; ?> />
+                                    <input type="text" name="menu_name_ar" id="menu_name_ar" class="form-control" required placeholder="<?=lang('m_type_name_ar')?>" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['menu_name_ar'])) . '"' : ""; ?> />
                                 </div>
                             </div>
                             <div class="form-group row text-end">
@@ -58,9 +58,9 @@ echo message_box('success');
                                     <?php
                                     }
                                     ?>
-                                    <input type="submit" name="submit" value="Save" class="btn btn-primary" />
+                                    <input type="submit" name="submit" value="<?=lang('save')?>" class="btn btn-primary" />
                                     <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER'];
-                                                else echo site_url('menus'); ?>" class="btn" title="btn btn-default">Cancel</a>
+                                                else echo base_url('menus'); ?>" class="btn" title="btn btn-default"><?=lang('cancel')?></a>
                                 </div>
                             </div>
                        
@@ -69,14 +69,14 @@ echo message_box('success');
                 }
                 if (isset($category)) {
                 ?>
-                    <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo site_url('menus/save/menucategory'); ?>">
+                    <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo base_url('menus/save/menucategory'); ?>">
                         <fieldset>
                             <legend><?php echo $pagetitle; ?></legend>
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="cat_name_ar">Menu Type</label>
+                                <label class="col-md-3 control-label" for="cat_name_ar"><?=lang('menu_type')?></label>
                                 <div class="col-md-9">
                                     <select id="menu_id" name="menu_id" class="form-control" required>
-                                        <option value="">Please select</option>
+                                        <option value=""><?=lang('please_select')?></option>
                                         <?php
                                         $i = 0;
                                         foreach ($menuList as $list) {
@@ -98,15 +98,15 @@ echo message_box('success');
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="cat_name">Menu Category Name</label>
+                                <label class="col-md-3 control-label" for="cat_name"><?=lang('menu_cat_name')?></label>
                                 <div class="col-md-9">
-                                    <input type="text" name="cat_name" class="form-control" required id="cat_name" placeholder="Menu Category Name" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['cat_name'])) . '"' : ""; ?> />
+                                    <input type="text" name="cat_name" class="form-control" required id="cat_name" placeholder="<?=lang('menu_cat_name')?>" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['cat_name'])) . '"' : ""; ?> />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="cat_name_ar">Menu Category Name Arabic</label>
+                                <label class="col-md-3 control-label" for="cat_name_ar"><?=lang('menu_cat_name_ar')?></label>
                                 <div class="col-md-9">
-                                    <input type="text" name="cat_name_ar" id="cat_name_ar" class="form-control" required placeholder="Menu Category Name Arabic" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['cat_name_ar'])) . '"' : ""; ?> />
+                                    <input type="text" name="cat_name_ar" id="cat_name_ar" class="form-control" required placeholder="<?=lang('menu_cat_name_ar')?>" <?php echo isset($menucat) ? 'value="' . (htmlspecialchars($menucat['cat_name_ar'])) . '"' : ""; ?> />
                                 </div>
                             </div>
 
@@ -119,9 +119,9 @@ echo message_box('success');
                                     <?php
                                     }
                                     ?>
-                                    <input type="submit" name="submit" value="Save" class="btn btn-primary" />
+                                    <input type="submit" name="submit" value="<?=lang('save')?>" class="btn btn-primary" />
                                     <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER'];
-                                                else echo site_url('menus'); ?>" class="btn" title="Cancel Changes">Cancel</a>
+                                                else echo base_url('menus'); ?>" class="btn" title="Cancel Changes"><?=lang('cancel')?></a>
                                 </div>
                             </div>
                         </fieldset>
@@ -130,47 +130,47 @@ echo message_box('success');
                 }
                 if (isset($item)) {
                 ?>
-                    <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo site_url('menus/save/menuitem'); ?>" enctype="multipart/form-data">
+                    <form id="menuForm" class="form-horizontal restaurant-form" method="post" action="<?php echo base_url('menus/save/menuitem'); ?>" enctype="multipart/form-data">
                         <fieldset>
                             <legend><?php echo $pagetitle; ?></legend>
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="menu_item">Menu Item Name</label>
+                                <label class="col-md-3 control-label" for="menu_item"><?=lang('menu_item_name')?></label>
                                 <div class="col-md-9">
-                                    <input type="text" name="menu_item" id="menu_item" class="form-control" required placeholder="Menu Item Name" <?php echo isset($menuitem) ? 'value="' . (htmlspecialchars($menuitem['menu_item'])) . '"' : ""; ?> />
+                                    <input type="text" name="menu_item" id="menu_item" class="form-control" required placeholder="<?=lang('menu_item_name')?>" <?php echo isset($menuitem) ? 'value="' . (htmlspecialchars($menuitem['menu_item'])) . '"' : ""; ?> />
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="menu_item_ar">Menu Item Name Arabic</label>
+                                <label class="col-md-3 control-label" for="menu_item_ar"><?=lang('menu_item_name_ar')?></label>
                                 <div class="col-md-9">
-                                    <input type="text" name="menu_item_ar" dir="rtl" id="menu_item_ar" class="form-control" required placeholder="Menu Item Name Arabic" <?php echo isset($menuitem) ? 'value="' . (htmlspecialchars($menuitem['menu_item_ar'])) . '"' : ""; ?> />
+                                    <input type="text" name="menu_item_ar" dir="rtl" id="menu_item_ar" class="form-control" required placeholder="<?=lang('menu_item_name_ar')?>" <?php echo isset($menuitem) ? 'value="' . (htmlspecialchars($menuitem['menu_item_ar'])) . '"' : ""; ?> />
                                 </div>
                             </div>
 
 
 
                             <div class="form-group row">
-                                <label for="rest_Description" class="col-md-3 control-label">Menu Item Description/Ingredients</label>
+                                <label for="rest_Description" class="col-md-3 control-label"><?=lang('menu_item_desc')?></label>
                                 <div class="col-md-9">
-                                    <textarea class="form-control" placeholder="Menu Item Description" rows="5" id="menuItemDescription" name="menuItem_Description"><?php if (isset($menuitem) && ($menuitem['description'] != "")) echo stripcslashes($menuitem['description']); ?></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="rest_Description_Ar" class="col-md-3 control-label">Menu Item Description/Ingredients Arabic</label>
-                                <div class="col-md-9">
-                                    <textarea class="form-control" placeholder="Menu Item Description Arabic" dir="rtl" rows="5" id="menuItem_Description_Ar" name="menuItem_Description_Ar"><?php if (isset($menuitem) && ($menuitem['descriptionAr'] != "")) echo stripcslashes($menuitem['descriptionAr']); ?></textarea>
+                                    <textarea class="form-control" placeholder="<?=lang('menu_item_desc')?>" rows="5" id="menuItemDescription" name="menuItem_Description"><?php if (isset($menuitem) && ($menuitem['description'] != "")) echo stripcslashes($menuitem['description']); ?></textarea>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-3 control-label" for="price">Price</label>
+                                <label for="rest_Description_Ar" class="col-md-3 control-label"><?=lang('menu_item_desc_ar')?></label>
                                 <div class="col-md-9">
-                                    <input class="form-control" type="text" name="price" id="price" placeholder="Price" <?php echo isset($menuitem) ? 'value="' . $menuitem['price'] . '"' : ""; ?> />
+                                    <textarea class="form-control" placeholder="<?=lang('menu_item_desc_ar')?>" dir="rtl" rows="5" id="menuItem_Description_Ar" name="menuItem_Description_Ar"><?php if (isset($menuitem) && ($menuitem['descriptionAr'] != "")) echo stripcslashes($menuitem['descriptionAr']); ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-md-3 control-label" for="price"><?=lang('Price')?></label>
+                                <div class="col-md-9">
+                                    <input class="form-control" type="text" name="price" id="price" placeholder="<?=lang('Price')?>" <?php echo isset($menuitem) ? 'value="' . $menuitem['price'] . '"' : ""; ?> />
                                 </div>
                             </div>
                             <?php if ($permissions['accountType'] != 0) { ?>
                                 <div class="form-group row">
-                                    <label for="rest_Logo" class="col-md-3 control-label">Image<br /><span class="small-font">Size: (200*200)</span></label>
+                                    <label for="rest_Logo" class="col-md-3 control-label"><?=lang('image')?><br /><span class="small-font"><?=lang('img_size')?>: (200*200)</span></label>
                                     <div class="col-md-9">
                                         <input class="form-control" type="file" id="menuItem_image" name="menuItem_image">
                                         <?php
@@ -198,9 +198,9 @@ echo message_box('success');
                                     <?php
                                     }
                                     ?>
-                                    <input type="submit" name="submit" value="Save" class="btn btn-primary" />
+                                    <input type="submit" name="submit" value="<?=lang('save')?>" class="btn btn-primary" />
                                     <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER'];
-                                                else echo site_url('menus'); ?>" class="btn" title="Cancel Changes">Cancel</a>
+                                                else echo base_url('menus'); ?>" class="btn" title="Cancel Changes"><?=lang('cancel')?></a>
                                 </div>
                             </div>
                         </fieldset>

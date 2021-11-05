@@ -1,10 +1,10 @@
 <div class="breadcrumb-div">
     <ul class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="<?php echo base_url('home'); ?>"><?= lang('home') ?></a> <span class="divider">/</span>
+            <a href="<?php echo base_url('home'); ?>"><?= lang('Dashboard') ?></a> <span class="divider">/</span>
         </li>
         <li class="breadcrumb-item">
-            <a href="<?php echo base_url('mydiners'); ?>">My Diner</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('mydiners'); ?>"><?= lang('my_diner') ?></a> <span class="divider">/</span>
         </li>
         <li class="active"> <?php echo $pagetitle; ?> </li>
     </ul>
@@ -23,12 +23,12 @@ echo message_box('success');
 
         <div id="resultsss" class="card-body">
             <h5>
-                <?php echo $pagetitle; ?> <span class="right-float" style=" font-size: 16px; ">(<?php echo $member['allowed_messages']; ?> Credits Remaining)</span>
+                <?php echo $pagetitle; ?> <span class="right-float" style=" font-size: 16px; ">(<?php echo $member['allowed_messages']; ?> <?= lang('credits_remaining') ?>)</span>
 
             </h5>
-            <form class="form-horizontal restaurant-form no-margin" name="diner-form" id="diner-form" method="post" action="<?php echo site_url('mydiners/savemessage'); ?>" enctype="multipart/form-data">
+            <form class="form-horizontal restaurant-form no-margin" name="diner-form" id="diner-form" method="post" action="<?php echo base_url('mydiners/savemessage'); ?>" enctype="multipart/form-data">
                 <div class="form-group row">
-                    <label class="col-md-2 control-label" for="">To</label>
+                    <label class="col-md-2 control-label" for=""><?= lang('to') ?></label>
                     <div class="col-md-9">
                         <?php
                         if (isset($user) && !empty($user)) {
@@ -39,113 +39,66 @@ echo message_box('success');
                         <?php
                         } else {
                         ?>
-                            <select class="form-control" required name="audienceType" id="audienceType" onchange="return sendMessageToDinners(this.value);">
-                                <option value="">Select Receivers </option>
+                            <select class="form-control" required name="audienceType" id="audienceType" onchange="sendMessageToDinners(this.value);">
+                                <option value=""><?= lang('select_receivers') ?> ...</option>
                                 <option value="2" <?php
                                                     if (isset($event) && $event['audienceType'] == '2') {
                                                         echo 'selected="selected"';
                                                     }
-                                                    ?>>All Diners </option>
+                                                    ?>><?= lang('all_diners') ?> </option>
                                 <option value="3" <?php
                                                     if (isset($event) && $event['audienceType'] == '3') {
                                                         echo 'selected="selected"';
                                                     }
-                                                    ?>>Selected Diners </option>
-                                <!--                                    <option value="3">All Diners Who like Your Page  </option>
-                                                                        <option value="4">All Diners Who Commented on Your Page  </option>
-                                                                        <option value="5">All Diners Who Rated on Your Page  </option>-->
+                                                    ?>><?= lang('selected_diners') ?> </option>
+
                             </select>
-                            <div id="selected-diners" <?php
-                                                        if (isset($event) && $event['audienceType'] == '3') {
-                                                        } else {
-                                                            echo 'class="hidden"';
-                                                        }
-                                                        ?>>
-                                <?php
-                                if (count($likedpeople) > 0) {
-                                    foreach ($likedpeople as $person) {
-                                        $userimage = $person['image'];
-                                        if ($userimage == "") {
-                                            $userimage = 'user-default.svg';
-                                        }
-                                ?>
-                                        <div id="customer" data-id="<?php echo $person['user_ID']; ?>" class="overflow customer cust-main-div cust">
-                                            <div>
-                                                <a class="customer-title" title="<?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="#">
-                                                    <?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>
-                                                </a>
-                                                <a class="customer-body" title="<?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" href="#">
-                                                    <img src="http://uploads.azooma.co/images/userx130/<?php echo $userimage; ?>" alt="<?php echo $person['user_NickName'] == "" ? $person['user_FullName'] : $person['user_NickName']; ?>" width="100" height="100" style="min-width:100px;width:100px;min-height:100px;height:100px;" />
-                                                </a>
-                                                <span>
-                                                    Since <?php echo date('Y', strtotime($person['createdAt'])); ?>
-                                                    <?php
-                                                    if (!empty($person['user_City'])) {
-                                                        if (!is_numeric($person['user_City'])) {
-                                                            echo " | " . $person['user_City'];
-                                                        } else {
-                                                            $city = "";
-                                                            $city = $this->MGeneral->getCity($person['user_City']);
-                                                            if (is_array($city)) {
-                                                                echo " | " . $city['city_Name'];
-                                                            }
-                                                        }
-                                                    }
-                                                    ?>
-                                                </span>
-                                            </div>
-                                            <?php
-                                            $class = "hidden";
-                                            $checked = '';
-                                            if (isset($event) && $event['recipients']) {
-                                                if (strpos($event['recipients'], ",")) {
-                                                    $arr = explode(",", $event['recipients']);
-                                                    if (in_array($person['user_ID'], $arr)) {
-                                                        $class = "";
-                                                        $checked = 'checked="checked"';
-                                                    }
-                                                } elseif (!empty($event['recipients'])) {
-                                                    if ($event['recipients'] == $person['user_ID']) {
-                                                        $class = "";
-                                                        $checked = 'checked="checked"';
-                                                    }
-                                                }
-                                            }
-                                            ?>
-                                            <div class="<?php echo $class; ?> cust-mouseover" id="cust-<?php echo $person['user_ID']; ?>" data-id="<?php echo $person['user_ID']; ?>">
-                                                <input <?php echo $checked; ?> class="icon-seprate" id="msg-<?php echo $person['user_ID']; ?>" type="checkbox" name="msg[]" value="<?php echo $person['user_ID']; ?>">
-                                            </div>
-                                        </div>
-                                <?php
-                                    }
-                                }
-                                ?>
-                            </div>
+
                         <?php
                         }
                         ?>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="col-md-2 control-label" for="subject">Subject</label>
-                    <div class="col-md-9">
-                        <input type="text" name="subject" class="form-control" required id="subject" placeholder="Subject" <?php echo isset($event) ? 'value="' . (htmlspecialchars($event['subject'])) . '"' : ""; ?> />
+
+                <div id="selected-diners" class="selected-diners d-none">
+                    <div class="form-group row">
+                        <label class="col-md-2 control-label" for=""><?= lang('selected_diners') ?></label>
+                        <div class="col-md-9">
+                     
+                            <select class="form-control select2" name="diners[]" multiple>
+                                <?php
+                                $recipients=isset($event['recipients']) ? explode(",",$event['recipients']) :[];
+                                
+                                foreach ($diners as $d) {
+                                ?>
+                                    <option value="<?= $d->user_ID ?>" <?=in_array($d->user_ID,$recipients) ? "selected" :""?>> <?= $d->user_FullName ?></option>
+                                <?php } ?>
+
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 control-label" for="message"> Message<br><span class="small-font">500 characters allowed</span></label>
+                    <label class="col-md-2 control-label" for="subject"><?= lang('subject') ?></label>
                     <div class="col-md-9">
-                        <textarea required class="form-control" name="message" id="message" rows="10" placeholder="Message"><?php echo isset($event) ? $event['message'] : ""; ?></textarea>
+                        <input type="text" name="subject" class="form-control" required id="subject" placeholder="<?= lang('subject') ?>" <?php echo isset($event) ? 'value="' . (htmlspecialchars($event['subject'])) . '"' : ""; ?> />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2 control-label" for="message"> <?= lang('message') ?><br><span class="small-font">500 <?= lang('char_allowed') ?></span></label>
+                    <div class="col-md-9">
+                        <textarea required class="form-control" name="message" id="message" rows="10" placeholder="<?= lang('message') ?>"><?php echo isset($event) ? $event['message'] : ""; ?></textarea>
 
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-md-2 control-label" for="message"> Image <br><span class="small-font">(640*500)</span></label>
+                    <label class="col-md-2 control-label" for="message"> <?= lang('image') ?> <br><span class="small-font">(640*500)</span></label>
                     <div class="col-md-9">
                         <input type="file" class="form-control" name="image" id="image">
                         <?php if (isset($event) && !empty($event['image'])) { ?>
                             <input type="hidden" name="image_old" value="<?php echo $event['image']; ?>">
-                            <a href="<?php echo site_url('images/' . $event['image']); ?>"> <img src="<?php echo site_url('images/' . $event['image']); ?>" width="100" alt="" /></a>
+                            <a href="<?php echo base_url('images/' . $event['image']); ?>"> 
+                            <img src="<?php echo base_url('images/' . $event['image']); ?>" width="100px" alt="" /></a>
                         <?php } ?>
                     </div>
                 </div>
@@ -156,7 +109,7 @@ echo message_box('success');
                             <input type="hidden" name="status" value="<?php echo $event['status']; ?>">
                             <input type="hidden" name="id" value="<?php echo $event['id']; ?>">
                         <?php } ?>
-                        <button type="submit" name="submit" value="Preview" class="btn btn-primary">Preview</button>
+                        <button type="submit" name="submit" value="Preview" class="btn btn-primary"><?= lang('preview') ?></button>
                     </div>
                 </div>
             </form>
@@ -197,16 +150,17 @@ echo message_box('success');
 
 
 <script type="text/javascript">
-    $("#diner-form").validate();
+    // $("#diner-form").validate();
 
     function sendMessageToDinners(ivalue) {
+        console.log(ivalue);
         if (ivalue == "" || ivalue == "0") {
-            $('#selected-diners').addClass('hidden');
+            $('.selected-diners').addClass('d-none');
         } else if (ivalue == "3") {
             //select individuals
-            $('#selected-diners').removeClass('hidden');
+            $('.selected-diners').removeClass('d-none');
         } else {
-            $('#selected-diners').addClass('hidden');
+            $('.selected-diners').addClass('d-none');
         }
     }
 
@@ -245,12 +199,16 @@ echo message_box('success');
 
 
     });
-
     $(document).ready(function() {
-        $("#message").charCount({
-            allowed: 500,
-            warning: 20,
-            counterText: 'Characters left: '
-        });
+        $('.select2').select2();
+        var val=$("#audienceType").val();
+        if (val == "" || val == "0") {
+            $('.selected-diners').addClass('d-none');
+        } else if (val == "3") {
+            //select individuals
+            $('.selected-diners').removeClass('d-none');
+        } else {
+            $('.selected-diners').addClass('d-none');
+        }
     });
 </script>

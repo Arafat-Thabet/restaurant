@@ -1,12 +1,12 @@
 <div class="pt-2">
   <ul class="breadcrumb">
   <li>
-    <a href="<?php echo base_url(); ?>">Home</a> <span class="divider">/</span>
+    <a href="<?php echo base_url(); ?>"><?=lang('Dashboard')?></a> <span class="divider">/</span>
   </li>
   <li>
-    <a href="<?php echo base_url('home/comments'); ?>">Comments</a> <span class="divider">/</span>
+    <a href="<?php echo base_url('home/comments'); ?>"><?=lang('customer_comments')?></a> <span class="divider">/</span>
   </li>
-  <li class="active">Comment Response</li>
+  <li class="active"><?=lang('comments_reply')?></li>
 </ul>
 </div>
 <?php
@@ -17,7 +17,7 @@ echo message_box('success');
 <div class="card">
 <div class="row-fluid spacer card-body">
       <h5>
-              Reply Back To '<?php echo $User_Name; ?>'
+              <?=lang('reply_to')?> "<?php echo $User_Name; ?>"
             
 
       </h5>
@@ -38,19 +38,19 @@ echo message_box('success');
 
      <div class="form-group row ">
      <div class="col-md-8 ">
-            <textarea class="form-control" name="replymsg" required id="message" rows="10" placeholder="Message to <?php echo $User_Name; ?>"></textarea>
+            <textarea class="form-control" name="replymsg" required id="message" rows="10" placeholder="<?=lang('msg_to')?> <?php echo $User_Name; ?>"></textarea>
      </div>
      </div>
   
 
           <div class="card-footer text-end p-0 mt-2 col-8">
-                            <input type="submit" name="submit" value="Send" class="btn btn-danger"/>
+                            <input type="submit" name="submit" value="<?=lang('Send')?>" class="btn btn-danger"/>
                             <a href="<?php if (isset($_SERVER['HTTP_REFERER'])) {
                   echo $_SERVER['HTTP_REFERER'];
               } else {
                   echo base_url('home/comments');
               }
-              ?>" class="btn btn-light" title="Cancel Changes">Cancel</a>
+              ?>" class="btn btn-light" title="Cancel Changes"><?=lang('cancel')?></a>
 
                     <?php
               if (isset($rest)) {

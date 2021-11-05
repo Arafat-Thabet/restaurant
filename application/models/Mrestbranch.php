@@ -1250,17 +1250,15 @@ class MRestBranch extends CI_Model
         }
         if (isset($_POST['restBranches'])) {
             $br = $_POST['restBranches'];
-            $restid = $this->input->post('rest_ID');
+            $restid = rest_id();
             if ((count($br) == 1) && ($br[0] == 'all')) {
-                $branchq = mysql_query("SELECT * FROM rest_branches WHERE rest_fk_id=$restid");
-                if (mysql_num_rows($branchq) > 0) {
-                    while ($br = mysql_fetch_array($branchq)) {
-                        $this->addOfferBranch($ofrid, $br['br_id'], $this->input->post('restID'));
-                    }
+                $branchq = $this->db->select("*")->from("rest_branches")->where('rest_fk_id', $restid)->get()->result();
+                foreach ($branchq as $br) {
+                    $this->addOfferBranch($ofrid, $br->br_id, rest_id());
                 }
             } else {
                 for ($i = 0; $i < count($br); $i++) {
-                    $this->addOfferBranch($ofrid, $br[$i], $this->input->post('restID'));
+                    $this->addOfferBranch($ofrid, $br[$i], rest_id());
                 }
             }
         }
@@ -1294,7 +1292,7 @@ class MRestBranch extends CI_Model
             'status' => $status,
             'updatedAt' => date('Y-m-d H:i:s', now())
         );
-        
+
         $this->db->where('id', $_POST['id']);
         $this->db->update('rest_offer', $data);
         $ofrid = $_POST['id'];
@@ -1312,15 +1310,13 @@ class MRestBranch extends CI_Model
         if (isset($_POST['restBranches'])) {
             $br = $_POST['restBranches'];
             if ((count($br) == 1) && ($br[0] == 'all')) {
-                $branchq = mysql_query("SELECT * FROM rest_branches WHERE rest_fk_id=$restid");
-                if (mysql_num_rows($branchq) > 0) {
-                    while ($br = mysql_fetch_array($branchq)) {
-                        $this->addOfferBranch($ofrid, $br['br_id'], $this->input->post('restID'));
-                    }
+                $branchq = $this->db->select("*")->from("rest_branches")->where('rest_fk_id', $restid)->get()->result();
+                foreach ($branchq as $br) {
+                    $this->addOfferBranch($ofrid, $br->br_id, rest_id());
                 }
             } else {
                 for ($i = 0; $i < count($br); $i++) {
-                    $this->addOfferBranch($ofrid, $br[$i], $this->input->post('restID'));
+                    $this->addOfferBranch($ofrid, $br[$i], rest_id());
                 }
             }
         }
@@ -1330,7 +1326,7 @@ class MRestBranch extends CI_Model
     {
         $this->db->select('booking_management.*,subscription.sub_detail,subscription.price,subscription.date_add,subscription.id as sub_id, subscription.allowed_messages');
         $this->db->where('booking_management.rest_id', $rest);
-        $this->db->join('subscription', 'subscription.rest_ID=booking_management.rest_id');
+        $this->db->join('subscription', 'subscription.rest_ID=booking_management.rest_id', 'left');
         $q = $this->db->get('booking_management');
         if ($q->num_rows() > 0) {
             return $q->row_Array();
@@ -1354,8 +1350,9 @@ class MRestBranch extends CI_Model
             'status' => $status,
             'preferredlang' => ($this->input->post('preferredlang'))
         );
-        $this->db->where('rest_id', $this->input->post('rest_ID'));
-        $this->db->where('id_user', $this->input->post('id_user'));
+        $where['rest_id'] = $this->input->post('rest_ID');
+        $where['id_user'] = $this->input->post('id_user');
+        $this->db->where($where);
         $this->db->update('booking_management', $data);
     }
 
@@ -1531,9 +1528,8 @@ class MRestBranch extends CI_Model
 
         $this->db->order_by('enter_time', 'DESC');
         $q = $this->db->get('image_gallery');
-    
-            return $q->result_Array();
-        
+
+        return $q->result_Array();
     }
 
     function addBranchImage($image = "", $title, $title_ar, $ratio = 0, $width = 0)
@@ -1657,88 +1653,16 @@ class MRestBranch extends CI_Model
     function getLikeUsers($rest = 0, $sortby = "", $audienceType = 0, $recipients = "")
     {
         return [];
-        $sql1 = "SELECT distinct user.user_ID,user.user_Email, user.user_FullName, user.user_NickName, user.image, user.user_RegisDate AS createdAt, user.user_Sex, user.user_City, 'likee' as action, likee_info.id AS actionID "
-            . "FROM (likee_info) JOIN diner_user.user user ON user.user_ID=likee_info.user_ID "
-            . "WHERE likee_info.status = 1 AND likee_info.rest_ID = '" . $rest . "'";
-
-        $sql2 = "SELECT distinct user.user_ID,user.user_Email, user.user_FullName, user.user_NickName, user.image, user.user_RegisDate AS createdAt, user.user_Sex, user.user_City, 'review' as action, review.review_ID AS actionID  "
-            . "FROM (review) JOIN diner_user.user user ON user.user_ID=review.user_ID "
-            . "WHERE review.rest_ID = '" . $rest . "'";
-
-        $sql3 = "SELECT distinct user.user_ID,user.user_Email, user.user_FullName, user.user_NickName, user.image, user.user_RegisDate AS createdAt, user.user_Sex, user.user_City, 'rating' as action, rating_info.rating_ID AS actionID  "
-            . "FROM (rating_info) JOIN diner_user.user user ON user.user_ID=rating_info.user_ID "
-            . "WHERE rating_info.rest_ID = '" . $rest . "' ";
-        if ($audienceType == 1 || $audienceType == 3) {
-            if (!empty($recipients)) {
-                $sql1 .= ' AND user.user_ID IN(' . $recipients . ') ';
-                $sql2 .= ' AND user.user_ID IN(' . $recipients . ') ';
-                $sql3 .= ' AND user.user_ID IN(' . $recipients . ') ';
-            } else {
-                $sql1 .= ' AND user.user_ID IN(' . $this->input->post('recipients') . ') ';
-                $sql2 .= ' AND user.user_ID IN(' . $this->input->post('recipients') . ') ';
-                $sql3 .= ' AND user.user_ID IN(' . $this->input->post('recipients') . ') ';
-            }
-        } elseif ($audienceType == 2) { //Male
-            $sql1 .= " AND user.user_Sex='Male' ";
-            $sql2 .= " AND user.user_Sex='Male' ";
-            $sql3 .= " AND user.user_Sex='Male' ";
-        }
-        //        } elseif ($audienceType == 3) { //Female
-        //            $sql1.=" AND user.user_Sex='Female' ";
-        //            $sql2.=" AND user.user_Sex='Female' ";
-        //            $sql3.=" AND user.user_Sex='Female' ";
-        //        }
-
-        $sql = "SELECT * FROM  (" . $sql1 . " UNION  " . $sql2 . " UNION  " . $sql3 . " ) X";
-        $sql .= " GROUP BY user_ID ";
-        if (!empty($sortby)) {
-            if ($sortby == "mostactive") {
-            } elseif ($sortby == "location") {
-                $sql .= " ORDER BY user_City ";
-            } elseif ($sortby == "Male") {
-                $sql .= " ORDER BY user_Sex DESC";
-            } elseif ($sortby == "female") {
-                $sql .= " ORDER BY user_Sex ASC";
-            }
-        }
-        $q = $this->db->query($sql);
-        if ($q->num_rows() > 0) {
-            return $q->result_Array();
-        }
-        /*
-          $this->db->select('user.user_Email,user.user_ID,user.user_FullName,user.user_NickName,user.image,createdAt,user.user_Sex');
-          $this->db->join('diner_user.user user', 'user.user_ID=likee_info.user_ID');
-          $this->db->where('likee_info.rest_ID', $rest);
-          $this->db->where('likee_info.status', 1);
-          if ($limit != 0) {
-          $this->db->limit($limit, $offset);
-          }
-          if (empty($sortby)) {
-          $this->db->order_by('likee_info.createdAt', 'DESC');
-          } else {
-          if ($sortby == "Female") {
-          $this->db->order_by('user.user_Sex', 'ASC');
-          } else {
-          $this->db->order_by('user.user_Sex', 'DESC');
-          }
-          }
-          if ($audienceType == 4) {
-          if (!empty($recipients)) {
-          $this->db->where('user.user_ID IN(' . $recipients . ')');
-          } else {
-          $this->db->where('user.user_ID IN(' . $this->input->post('recipients') . ')');
-          }
-          }elseif($audienceType==2){ //Male
-          $this->db->where('user.user_Sex','Male');
-          }elseif($audienceType==3){ //Female
-          $this->db->where('user.user_Sex','Female');
-          }
-
-          $q = $this->db->get('likee_info');
-          if ($q->num_rows() > 0) {
-          return $q->result_Array();
-          }
-         */
+        $where['d.rest_ID'] = rest_id();
+        $c_name = sys_lang() == "arabic" ? "city_Name_ar" : "city_Name";
+        $stmt = $this->db->select('user.*');
+        $stmt = $this->db->select("c.$c_name as city_name,d.*");
+        $this->db->from("user as user");
+        $this->db->join("likee_info as d", "user.user_ID=d.user_ID");
+        $this->db->join("city_list as c", "user.user_City=c.city_ID", "left");
+        $this->db->order_by("d.createdAt", "desc");
+        $this->db->where($where);
+        return $this->db->get()->result();
     }
 
     function getLikePercentage($rest = 0, $number = 0)
@@ -1818,9 +1742,9 @@ class MRestBranch extends CI_Model
     {
         $this->db->where('id', $id);
         $q = $this->db->get('dinermessage');
-        if ($q->num_rows() > 0) {
+    
             return $q->row_Array();
-        }
+        
     }
 
     function getAllDinerMessages($rest = 0)
@@ -1851,5 +1775,4 @@ class MRestBranch extends CI_Model
         $where['rest_ID'] = intval($rest_id);
         return   $this->db->select("count(f.id) as count")->from("likee_info as f")->join("user as u", "u.user_ID=f.user_ID")->where($where)->get()->row()->count;
     }
- 
 }

@@ -5,9 +5,9 @@ class Gallery extends MY_Controller
     function __construct()
     {
         parent::__construct();
-        $this->load->model('Mgeneral',"MGeneral");
-        $this->load->model('Mbooking',"MBooking");
-        $this->load->model('Mrestbranch',"MRestBranch");
+        $this->load->model('Mgeneral', "MGeneral");
+        $this->load->model('Mbooking', "MBooking");
+        $this->load->model('Mrestbranch', "MRestBranch");
         $this->load->library('pagination');
         $this->load->library('images');
         //$this->output->enable_profiler(true);
@@ -18,7 +18,7 @@ class Gallery extends MY_Controller
 
     function index($item = 0)
     {
-        $limit = 20;
+        $limit = 50000;
         $ajax = 0;
         $offset = 0;
         $rest = $restid = $this->session->userdata('rest_id');
@@ -37,7 +37,7 @@ class Gallery extends MY_Controller
         $data['sitename'] = $this->MGeneral->getSiteName();
         $data['logo'] = $logo = $this->MGeneral->getLogo();
         $data['rest'] = $restdata = $this->MGeneral->getRest($restid, false, true);
-        $data['pagetitle'] = $data['title'] = "Photos - " . (htmlspecialchars($data['rest']['rest_Name']));
+        $data['pagetitle'] = $data['title'] = lang('photos') . " - " . (htmlspecialchars($data['rest']['rest_Name']));
         $data['side_menu'] = array("gallery", "r_photo");
 
         $config['base_url'] = base_url() . 'photos?limit=' . $limit;
@@ -79,9 +79,9 @@ class Gallery extends MY_Controller
             $newFlag = FALSE;
             $data['image'] = $imageData = $this->MRestBranch->getRestImage($image);
             if ($permissions['accountType'] == 0 && $imageData['user_ID'] != "") {
-                $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-             //   redirect('accounts');
-               // returnMsg("error", 'accounts', 'Your current package does not have this service. Please upgrade your package.');
+                $this->session->set_flashdata('error', lang('gallry_plan_error'));
+                //   redirect('accounts');
+                returnMsg("error", 'accounts', lang('gallry_plan_error'));
             }
             $data['pagetitle'] = $data['title'] = $data['image']['title'] . ' - ' . (htmlspecialchars($data['rest']['rest_Name']));;
         } else {
@@ -109,15 +109,15 @@ class Gallery extends MY_Controller
             //echo $availableImage;echo '- '.$noOfImages;exit; 
             if (in_array(6, $sub_detail_permissions) || in_array(7, $sub_detail_permissions) || in_array(8, $sub_detail_permissions)  || in_array(9, $sub_detail_permissions)) {
                 if ($noOfImages >= $availableImage) {
-                    $this->session->set_flashdata('error', 'You can only add ' . $availableImage . ' image in this package. Please upgrade your package.');
-                 //   redirect('accounts');
+                    $this->session->set_flashdata('error', lang('you_can_add') . ' ' . $availableImage . ' ' . lang('imagesadd_note'));
+                    redirect('accounts');
                 }
             } elseif ($permissions['accountType'] == 0 && $noOfImages >= $availableImage) {
-                $this->session->set_flashdata('error', 'You can only add ' . $availableImage . ' image in this package. Please upgrade your package.');
-                //redirect('accounts');
+                $this->session->set_flashdata('error', lang('you_can_add') . ' ' . $availableImage . ' ' . lang('imagesadd_note'));
+                redirect('accounts');
             } elseif ($permissions['accountType'] > 0) {
-                $this->session->set_flashdata('error', 'You can only add ' . $availableImage . ' image in this package. Please upgrade your package.');
-                //redirect('accounts');
+                $this->session->set_flashdata('error', lang('you_can_add') . ' ' . $availableImage . ' ' . lang('imagesadd_note'));
+                redirect('accounts');
             }
         }
 
@@ -153,8 +153,8 @@ class Gallery extends MY_Controller
             $noOfImages = $this->MRestBranch->getRestAllImages($rest);
             if (in_array(6, $sub_detail_permissions) || in_array(7, $sub_detail_permissions) || in_array(8, $sub_detail_permissions)  || in_array(9, $sub_detail_permissions)) {
                 if ($noOfImages > $availableImage) {
-                //    $this->session->set_flashdata('error', 'You can only add ' . $availableImage . ' image in this package. Please upgrade your package.');
-                  //  redirect('accounts');
+                    $this->session->set_flashdata('error', lang('you_can_add') . ' ' . $availableImage . ' ' . lang('imagesadd_note'));
+                    redirect('accounts');
                 }
             }
 
@@ -166,8 +166,7 @@ class Gallery extends MY_Controller
                     $image    = $this->MGeneral->uploadImage('image_full', '../uploads/Gallery/');
                     list($width, $height, $type, $attr) = getimagesize('../uploads/Gallery/' . $image);
                     if ($width < 200 && $height < 200) {
-                        returnMsg("error","gallery/image?rest=" . $rest,  'Image is very small. Please upload image which must be bigger than 200*200 width and height.');
-
+                        returnMsg("error", "gallery/image?rest=" . $rest, lang('img_size_error'));
                     }
                     if (($width > 800) || ($height > 500)) {
                         $this->images->resize('../uploads/Gallery/' . $image, 800, 500, '../uploads/Gallery/' . $image);
@@ -206,17 +205,15 @@ class Gallery extends MY_Controller
                 $image_ID = $this->input->post('image_ID');
                 $this->MRestBranch->updateRestImage($image, $ratio, $width);
                 $this->MRestBranch->updateRest($rest);
-                $this->MGeneral->addActivity('A new image is added.', $image_ID);
-                returnMsg("success","gallery/image?rest=" . $rest, 'Image updated successfully');
-
+                $this->MGeneral->addActivity(lang('img_edit_log'), $image_ID);
+                returnMsg("success", "gallery/image?rest=" . $rest, lang('img_edit_success'));
             } else {
                 if (is_uploaded_file($_FILES['image_full']['tmp_name'])) {
                     $image    = $this->MGeneral->uploadImage('image_full', '../uploads/Gallery/');
                     list($width, $height, $type, $attr) = getimagesize('../uploads/Gallery/' . $image);
                     if ($width < 200 || $height < 200) {
-                      
-                        returnMsg("error","gallery/image?rest=" . $rest, 'Image is very small. Please upload image which must be bigger than 200*200 width and height.');
 
+                        returnMsg("error", "gallery/image?rest=" . $rest, lang('img_size_error'));
                     }
 
                     if (($width > 800) || ($height > 500)) {
@@ -250,16 +247,14 @@ class Gallery extends MY_Controller
                     $theight = $height * (400 / $width);
                     $this->images->resize('../uploads/Gallery/' . $image, 400, $theight, '../uploads/Gallery/400x/' . $image);
                     $image_ID = $this->MRestBranch->addRestImage($image, $ratio, $width);
-                    $this->MGeneral->addActivity('A new image is added. ', $image_ID);
+                    $this->MGeneral->addActivity(lang('img_added_log'), $image_ID);
                     $this->MRestBranch->updateRest($rest);
                 }
-                returnMsg("success",'gallery?rest=' . $rest, 'Image added successfully');
-
+                returnMsg("success", 'gallery?rest=' . $rest, lang('img_added_success'));
             }
         } else {
-     
-            returnMsg("error",'gallery', 'Some error happened Please try again');
 
+            returnMsg("error", 'gallery', lang('proccess_error'));
         }
     }
 
@@ -270,12 +265,10 @@ class Gallery extends MY_Controller
         if ($image != 0) {
             $this->MRestBranch->deleteRestImage($image);
             $this->MRestBranch->updateRest($rest);
-            returnMsg("success",'gallery','Image deleted successfully');
-       
+            returnMsg("success", 'gallery', lang('img_deleted'));
         } else {
 
-            returnMsg("error",'gallery', 'Some error happened Please try again');
-
+            returnMsg("error", 'gallery', lang('proccess_error'));
         }
     }
 
@@ -291,19 +284,17 @@ class Gallery extends MY_Controller
             $permissions = $this->MBooking->restPermissions($rest);
             $imageData = $this->MRestBranch->getRestImage($image);
             if ($permissions['accountType'] == 0 && $imageData['user_ID'] != "") {
-                $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-                redirect('accounts');
+                $this->session->set_flashdata('error',lang('gallry_plan_error'));
+                returnMsg("error","accounts",lang('gallry_plan_error'));
             }
 
             $this->MRestBranch->makeFeaturedImage($image, $rest);
             $this->MRestBranch->updateRest($rest);
-         
-            returnMsg("success",'gallery','Profile Photo Updated Successfully');
 
+            returnMsg("success", 'gallery', lang('profile_img_updated'));
         } else {
-        
-            returnMsg("error",'gallery', 'Some error happened Please try again');
 
+            returnMsg("error", 'gallery',lang('proccess_error'));
         }
     }
 
@@ -319,13 +310,11 @@ class Gallery extends MY_Controller
 
             $this->MRestBranch->unsetAsFeaturedImage($image, $rest);
             $this->MRestBranch->updateRest($rest);
- 
-            returnMsg("success",'gallery', 'Profile Photo Removed successfully');
 
+            returnMsg("success", 'gallery', lang('profile_img_removed'));
         } else {
-       
-            returnMsg("error",'gallery',  'Some error happened Please try again');
 
+            returnMsg("error", 'gallery', lang('proccess_error'));
         }
     }
 }

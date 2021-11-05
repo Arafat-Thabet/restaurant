@@ -116,7 +116,7 @@ class Smart
     {
         get_instance()->load->database('default',true);
         if(!empty($key)){
-        $val = get_instance()->db->select($key)->get("tbl_gsettings")->row();
+        $val = get_instance()->db->select($key)->get("settings")->row();
         return isset($val->$key) ? $val->$key : null;
         }
         else{

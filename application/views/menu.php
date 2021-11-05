@@ -6,26 +6,26 @@ echo message_box('success');
 <div class="pt-2">
     <ul class="breadcrumb">
         <li>
-            <a href="<?php echo base_url('menus'); ?>">Menus</a> <span class="divider">/</span>
+            <a href="<?php echo base_url('menus'); ?>"><?=lang('menu_management')?></a> <span class="divider">/</span>
         </li>
         <?php
         if (isset($_GET['menu_id']) && !isset($_GET['cat_id'])) {
         ?>
             <li class="active">
-                Menu Categories
+               <?=lang('menu_categories')?>
             </li>
         <?php
         } elseif (isset($_GET['cat_id']) && isset($_GET['cat_id'])) {
         ?>
             <li>
-                <a href="<?php echo base_url('menus?rest=' . $_GET['rest'] . '&menu_id=' . $_GET['menu_id']); ?>">Menu Categories </a> <span class="divider">/</span>
+                <a href="<?php echo base_url('menus?rest=' . $_GET['rest'] . '&menu_id=' . $_GET['menu_id']); ?>"> <?=lang('menu_categories')?></a> <span class="divider">/</span>
             </li>
             <li class="active">
-                Menu Items
+               <?=lang('menu_items')?>
             </li>
         <?php } else { ?>
 
-            <li class="active">Menus </li>
+            <li class="active"><?=lang('menus')?> </li>
         <?php
         }
         ?>
@@ -38,7 +38,7 @@ echo message_box('success');
     <div class="card-body">
         <div class="text-end  mb-2">
             <h4 class="pull-start">
-                Total Menu <?php echo ($topName); ?> (<?php echo $total; ?>)
+               <?=lang('total_menu')?> <?php echo ($topName); ?> (<?php echo $total; ?>)
 
             </h4>
             <a href="<?php echo base_url('menus/form?rest=' . $rest['rest_ID']); ?><?php if (isset($_GET['menu_id']) && ($_GET['menu_id'] != "")) {
@@ -64,7 +64,7 @@ echo message_box('success');
                             <?php echo $tableheadingAr; ?>
                         </th>
                         <th width="20%">
-                            Actions
+                            <?=lang('actions')?>
                         </th>
                     </thead>
                     <tbody>

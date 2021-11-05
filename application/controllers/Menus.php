@@ -50,39 +50,39 @@ class Menus extends MY_Controller {
         $data['sitename'] = $this->MGeneral->getSiteName();
         $data['logo'] = $logo = $this->MGeneral->getLogo();
         $data['rest'] = $restdata = $this->MGeneral->getRest($restid, false, true);
-        $data['title'] = "Menu for " . (htmlspecialchars($data['rest']['rest_Name']));
+        $data['title'] = lang('menu_for')." " . (htmlspecialchars($data['rest']['rest_Name']));
 
         if ($item != 0) {
             $data['menus'] = $this->MRestBranch->getAllMenuItems($rest, $item);
             $data['total'] = $this->MRestBranch->getTotalMenuItems($rest, $item);
             $data['cat'] = $this->MRestBranch->getMenuCat($item);
-            $data['pagetoptitle'] = "Menu Items";
-            $data['pagetitlelink'] = "Add New Menu item";
+            $data['pagetoptitle'] = lang('menu_items');
+            $data['pagetitlelink'] = lang('add_menu_item');
             $data['pageview'] = "";
             $data['tmp_link'] = "";
-            $data['tableheading'] = "Item Name";
-            $data['tableheadingAr'] = "Item Name Arabic";
-            $data['topName'] = 'Items';
+            $data['tableheading'] = lang('item_name');
+            $data['tableheadingAr'] =lang('item_name_ar');
+            $data['topName'] = lang('Items');
         } elseif ($menu_id != 0) {
             $data['menus'] = $this->MRestBranch->getAllMenuCats($rest, 0, $menu_id);
             $data['total'] = $this->MRestBranch->getTotalMenuCats($rest, $menu_id);
-            $data['pagetoptitle'] = "Menu Category";
-            $data['pagetitlelink'] = "Add New Menu Category";
-            $data['pageview'] = "View Items";
+            $data['pagetoptitle'] = lang('menu_category');
+            $data['pagetitlelink'] = lang('add_menu_category');
+            $data['pageview'] = lang('view_items');
             $data['tmp_link'] = "";
-            $data['tableheading'] = "Category Name";
-            $data['tableheadingAr'] = "Category Name Arabic";
-            $data['topName'] = 'Categories';
+            $data['tableheading'] = lang('category_name');
+            $data['tableheadingAr'] = lang('category_name_ar');
+            $data['topName'] = lang('categories');
         } else {
             $data['menus'] = $this->MRestBranch->getAllMenu($rest);
             $data['total'] = $this->MRestBranch->getTotalMenu($rest);
-            $data['pagetoptitle'] = "Menu Types";
-            $data['pagetitlelink'] = "Add New Menu Type";
-            $data['pageview'] = "View Categories";
+            $data['pagetoptitle'] = lang('menu_types');
+            $data['pagetitlelink'] =lang('add_menu_types');
+            $data['pageview'] = lang('view_categories');
             $data['tmp_link'] = "";
-            $data['tableheading'] = "Menu Name";
-            $data['tableheadingAr'] = "Menu Name Arabic";
-            $data['topName'] = 'Types';
+            $data['tableheading'] = lang('menu_name');
+            $data['tableheadingAr'] =  lang('menu_name_ar');
+            $data['topName'] =lang('types');
         }
 
         $data['main'] = 'menu';
@@ -119,10 +119,10 @@ class Menus extends MY_Controller {
             if (isset($_GET['item']) && ($_GET['item'] != "")) {
                 $newFlag = FALSE;
                 $data['menuitem'] = $this->MRestBranch->getMenuItem($_GET['item']);
-                $data['title'] = $data['pagetitle'] = 'Updating Menu item ' . $data['menuitem']['menu_item'];
+                $data['title'] = $data['pagetitle'] = lang('updating_menu_item').' ' . $data['menuitem']['menu_item'];
             } else {
                 $newFlag = TRUE;
-                $data['pagetitle'] = 'New - ' . $data['cat']['cat_name'];
+                $data['pagetitle'] = lang('New').' - ' . $data['cat']['cat_name'];
             }
         } elseif (isset($_GET['menu_id']) && ($_GET['menu_id'] != "") && ( isset($_GET['cat_id']) && ( $_GET['cat_id'] != "" || $_GET['cat_id'] == "0" ) )) {
             $data['category'] = 1;
@@ -130,21 +130,21 @@ class Menus extends MY_Controller {
 
             if (isset($_GET['cat_id']) && (empty($_GET['cat_id']))) {
                 $newFlag = TRUE;
-                $data['title'] = $data['pagetitle'] = 'New Menu Category for ' . (htmlspecialchars($data['rest']['rest_Name']));
+                $data['title'] = $data['pagetitle'] = lang('new_menu_category').' ' . (htmlspecialchars($data['rest']['rest_Name']));
             } else {
                 $newFlag = FALSE;
                 $data['menucat'] = $this->MRestBranch->getMenuCat($cat_id, $menu_id);
-                $data['title'] = $data['pagetitle'] = 'Updating Menu Category ' . $data['menucat']['cat_name'];
+                $data['title'] = $data['pagetitle'] = lang('update_menu_category').' ' . $data['menucat']['cat_name'];
             }
         } else {
             $data['menu'] = 1;
             if ($menu_id == 0) {
                 $newFlag = TRUE;
-                $data['title'] = $data['pagetitle'] = 'New Menu Type for ' . (htmlspecialchars($data['rest']['rest_Name']));
+                $data['title'] = $data['pagetitle'] = lang('new_menu_type').' ' . (htmlspecialchars($data['rest']['rest_Name']));
             } else {
                 $newFlag = FALSE;
                 $data['menucat'] = $this->MRestBranch->getMenu($menu_id);
-                $data['title'] = $data['pagetitle'] = 'Updating Menu Type ' . $data['menucat']['menu_name'];
+                $data['title'] = $data['pagetitle'] = lang('updating_menu_type').' ' . $data['menucat']['menu_name'];
             }
         }
         if ($newFlag) {
@@ -174,8 +174,8 @@ class Menus extends MY_Controller {
             if (isset($data['menu']) && !empty($data['menu'])) {
                 $totalMenu = $this->MRestBranch->getTotalMenu($restid);
                 if ($totalMenu >= $availableMenuType) {
-                    $this->session->set_flashdata('error', 'You can only add 1 Menu Type in this Package. Please upgrade your package.');
-                    redirect('accounts');
+                    $this->session->set_flashdata('error', lang('menu_type_plan_error'));
+                    returnMsg("error","accounts",lang('menu_type_plan_error'));
                 }
             }
          
@@ -183,8 +183,8 @@ class Menus extends MY_Controller {
             if (isset($data['category']) && !empty($data['category'])) {
                 $totalMenuCats = $this->MRestBranch->getTotalMenuCats($restid);
                 if ($totalMenuCats >= $availableMenuCats) {
-                    $this->session->set_flashdata('error', 'You can only add 3 Menu Categories in this Package. Please upgrade your package.');
-                    redirect('accounts');
+                    $this->session->set_flashdata('error', lang('menu_cat_plan_error'));
+                    returnMsg("error","accounts",lang('menu_cat_plan_error'));
                 }
             }
          
@@ -192,8 +192,8 @@ class Menus extends MY_Controller {
             if (isset($data['item']) && !empty($data['item'])) {
                 $totalMenuCats = $this->MRestBranch->getTotalMenuItems($restid, $data['cat']['cat_id']);
                 if ($totalMenuCats >= $availableMenuCatItems) {
-                    $this->session->set_flashdata('error', 'You can only add 3 Menu Categories in this Package. Please upgrade your package.');
-                  redirect('accounts');
+                    $this->session->set_flashdata('error',lang('menu_cats_plan_error'));
+                    returnMsg("error","accounts",lang('menu_cats_plan_error'));
                 }
             }
         }//edit flag
@@ -241,21 +241,21 @@ class Menus extends MY_Controller {
                     $menuID = $menu_id = $this->input->post('menu_id');
                     $this->MRestBranch->updateMenu();
                     $this->MRestBranch->updateRest($rest);
-                    $msg= 'Menu Type updated successfully';
-                    $this->MGeneral->addActivity('A New Menu Type is added.', $menu_id);
+                    $msg= lang('m_type_updated_success');
+                    $this->MGeneral->addActivity(lang('new_type_log'), $menu_id);
                 } else {
                     ##MENU TYPE###
                     $totalMenu = $this->MRestBranch->getTotalMenu($restid);
                     if ($totalMenu >= $availableMenuType) {
-                        $this->session->set_flashdata('error', 'You can only add 1 Menu Type in this Package. Please upgrade your package.');
-                        redirect('accounts');
+                        $this->session->set_flashdata('error', lang('menu_type_plan_error'));
+                        returnMsg("error","accounts",lang('menu_type_plan_error'));
                     }
                   
                     $menuID = $last_insert_id = $this->MRestBranch->addMenu();
                     $this->MRestBranch->updateMenuCats($rest, $last_insert_id);
                     $this->MRestBranch->updateRest($rest);
-                    $msg= 'Menu Type added successfully';
-                    $this->MGeneral->addActivity('A New Menu Type is added.', $last_insert_id);
+                    $msg= lang('m_type_added');
+                    $this->MGeneral->addActivity(lang('new_type_log'), $last_insert_id);
                 }
                
                 if (isset($firstTimeLogin) && $firstTimeLogin == TRUE) {
@@ -265,7 +265,7 @@ class Menus extends MY_Controller {
                     $profilecompletionstatus = $this->MGeneral->getProfileCompletionStatus($restid, $uuserid);
                     if ($profilecompletionstatus['profilecompletion'] == 2) {
                         //$this->MGeneral->updateProfileCompletionStatus($restid,$uuserid,3);
-                        $msg= 'Now You add Menu Category for ' . $this->input->post('menu_name');
+                        $msg= lang('m_cat_added_for').' ' . $this->input->post('menu_name');
                         
                         returnMsg("success",'menus?rest=' . $rest . '&menu_id=' . $menuID,$msg);
                     }
@@ -276,7 +276,7 @@ class Menus extends MY_Controller {
                           returnMsg("success",'menus',$msg);
 
             } else {
-                returnMsg("error",'menus','Some error happened Please try again');
+                returnMsg("error",'menus',lang('proccess_error'));
 
             }
         
@@ -292,20 +292,20 @@ class Menus extends MY_Controller {
                     $catID = $cat_id = $this->input->post('cat_id');
                     $this->MRestBranch->updateMenuCat();
                     $this->MRestBranch->updateRest($rest);
-                    $msg= 'Menu Category updated successfully';
-                    $this->MGeneral->addActivity('A New Menu Category is added', $cat_id);
+                    $msg= lang('m_type_add_success');
+                    $this->MGeneral->addActivity(lang('m_type_add_log'), $cat_id);
                     //redirect('menus?rest='.$rest.'&cat_id='.$_POST['cat_id'].'&menu_id='.$_POST['menu_id']);
                 } else {
                     ##MENU CATEGORIES###
                     $totalMenuCats = $this->MRestBranch->getTotalMenuCats($restid);
                     if ($totalMenuCats >= $availableMenuCats) {
-                        $this->session->set_flashdata('error', 'You can only add 3 Menu Categories in this Package. Please upgrade your package.');
-                        redirect('accounts');
+                        $this->session->set_flashdata('error', lang('menu_cat_plan_error'));
+                        returnMsg("error","accounts",lang('menu_cat_plan_error'));
                     }
                     $catID = $last_inserted_id = $this->MRestBranch->addMenuCat();
                     $this->MRestBranch->updateRest($rest);
-                    $msg='Menu Category added successfully';
-                    $this->MGeneral->addActivity('A New Menu Category is added.', $last_inserted_id);
+                    $msg=lang('m_cat_add_success');
+                    $this->MGeneral->addActivity(lang('m_cat_add_log'), $last_inserted_id);
                     //redirect('menus?rest='.$rest.'&cat_id='.$last_inserted_id.'&menu_id='.$_POST['menu_id']);
                 }
 
@@ -317,7 +317,7 @@ class Menus extends MY_Controller {
                     $profilecompletionstatus = $this->MGeneral->getProfileCompletionStatus($restid, $uuserid);
                     if ($profilecompletionstatus['profilecompletion'] == 2) {
                         //$this->MGeneral->updateProfileCompletionStatus($restid,$uuserid,3);
-                        $msg= 'Now You add Menu Item for ' . $this->input->post('cat_name');
+                        $msg= lang('m_add_item_success').' ' . $this->input->post('cat_name');
                         returnMsg("success",'menus?rest=' . $rest . '&menu_id=' . $menuID . '&cat_id=' . $catID . '&item=' . $catID,$msg);
                       
                     }
@@ -327,7 +327,7 @@ class Menus extends MY_Controller {
 
             } else {
           
-                returnMsg("error",'menus','Some error happened Please try again');
+                returnMsg("error",'menus',lang('proccess_error'));
 
             }
         }
@@ -361,6 +361,7 @@ class Menus extends MY_Controller {
                         $config['wm_vrt_alignment'] = 'bottom';
                         $config['wm_hor_alignment'] = 'right';
                         $config['wm_padding'] = '-10';
+                        $config['image_library'] = 'gd2';
                         $this->image_lib->initialize($config);
                         //$this->image_lib->watermark();
                         //$this->image_lib->clear();
@@ -380,21 +381,21 @@ class Menus extends MY_Controller {
                     $item_id = $this->input->post('id');
                     $this->MRestBranch->updateMenuItem($image);
                     $this->MRestBranch->updateRest($rest);
-                    $msg='Menu item updated successfully';
-                    $this->MGeneral->addActivity('A New Menu Item is added.', $item_id);
+                    $msg=lang('m_item_edit_success');
+                    $this->MGeneral->addActivity(lang('m_item_edit_log'), $item_id);
                     //redirect('menus?rest='.$rest.'&cat_id='.$cat.'&menu_id='.$menu_id.'&item='.$cat);
                 } else {
                     ##MENU ITEMS###
                     $totalMenuCats = $this->MRestBranch->getTotalMenuItems($restid, $this->input->post('cat_id'));
                     if ($totalMenuCats >= $availableMenuCatItems) {
-                        $this->session->set_flashdata('error', 'You can only add 3 Menu Categories in this Package. Please upgrade your package.');
-                        redirect('accounts');
+                        $this->session->set_flashdata('error', lang('menu_cat_plan_error'));
+                        returnMsg("error","accounts",lang('menu_cat_plan_error'));
                     }
                     
                     $item_id = $this->MRestBranch->addMenuItem($image);
                     $this->MRestBranch->updateRest($rest);
-                    $msg= 'Menu item added successfully';
-                    $this->MGeneral->addActivity('A New Menu Item is added.', $item_id);
+                    $msg= lang('m_item_add_done');
+                    $this->MGeneral->addActivity(lang('m_item_add_log'), $item_id);
                     //redirect('menus?rest='.$rest.'&cat_id='.$cat.'&menu_id='.$menu_id.'&item='.$cat);
                 }
 
@@ -415,7 +416,7 @@ class Menus extends MY_Controller {
                 returnMsg("success",'menus?rest=' . $rest . '&cat_id=' . $cat . '&menu_id=' . $menu_id . '&item=' . $cat,$msg);
 
             } else {
-                returnMsg("error",'menus','Some error happened Please try again');
+                returnMsg("error",'menus',lang('proccess_error'));
             }
         }
     
@@ -427,18 +428,18 @@ class Menus extends MY_Controller {
         $this->MRestBranch->updateRest($rest);
         if (isset($_GET['menu_id']) && !isset($_GET['cat_id']) && !isset($_GET['item'])) {
             $this->MRestBranch->deleteMenu(($_GET['menu_id']), $rest);
-            returnMsg("success","menus",'Menu Type deleted successfully');
+            returnMsg("success","menus",lang('m_type_deleted'));
         } elseif (isset($_GET['menu_id']) && isset($_GET['cat_id'])) {
             $cat_id = ($_GET['cat_id']);
             $menu_id = ($_GET['menu_id']);
             $this->MRestBranch->deleteMenuCat($cat_id, $menu_id, $rest);
         
-            returnMsg("success",'menus?rest=' . $rest . '&cat_id=' . $cat_id . '&menu_id=' . $menu_id,'Menu Category deleted successfully');
+            returnMsg("success",'menus?rest=' . $rest . '&cat_id=' . $cat_id . '&menu_id=' . $menu_id,lang('m_cat_deleted'));
 
         } elseif (isset($_GET['cat'])) {
             $this->MRestBranch->deleteMenuItem(($_GET['item']));
       
-            returnMsg("success",'menus?rest=' . $rest . '&item=' . $_GET['cat'] . '&cat_id=' . $_GET['cat'] . '&menu_id=' . $_GET['menu_id'],'Menu item deleted successfully');
+            returnMsg("success",'menus?rest=' . $rest . '&item=' . $_GET['cat'] . '&cat_id=' . $_GET['cat'] . '&menu_id=' . $_GET['menu_id'],lang('m_item_deleted'));
 
         } else {
             redirect('menus');
@@ -453,7 +454,7 @@ class Menus extends MY_Controller {
         $data['sitename'] = $this->MGeneral->getSiteName();
         $data['logo'] = $logo = $this->MGeneral->getLogo();
         $data['rest'] = $restdata = $this->MGeneral->getRest($restid, false, true);
-        $data['pagetitle'] = $data['title'] = "PDF Menu For " . (htmlspecialchars($data['rest']['rest_Name']));
+        $data['pagetitle'] = $data['title'] = lang('menu_pdf')." " . (htmlspecialchars($data['rest']['rest_Name']));
 
         $data['menus'] = $this->MRestBranch->getAllMenuPDF($rest);
         $data['total'] = $this->MRestBranch->getTotalMenuPDF($rest);
@@ -476,10 +477,10 @@ class Menus extends MY_Controller {
 
         if ($pdf == 0) {
             $editFlag = FALSE;
-            $data['pagetitle'] = "New PDF Menu";
+            $data['title'] = $data['pagetitle'] = lang("new_pdf_menu");
         } else {
             $editFlag = TRUE;
-            $data['pagetitle'] = "Updating PDF Menu";
+            $data['title'] = $data['pagetitle'] = lang('edit_pdf_menu');
             $data['menu'] = $this->MRestBranch->getPDFMenu($pdf);
         }
 
@@ -497,8 +498,8 @@ class Menus extends MY_Controller {
             }
             $totalMenuPDF = $this->MRestBranch->getTotalMenuPDF($restid);
             if ($totalMenuPDF >= $available_pdfMenu) {
-                $this->session->set_flashdata('error', 'You can only add 1 Pdf Menu in this Package. Please upgrade your package.');
-                redirect('accounts');
+                $this->session->set_flashdata('error', lang('pdf_menu_plan_error'));
+                returnMsg("error",'accounts',lang('pdf_menu_plan_error'));
             }
         }
 
@@ -523,11 +524,11 @@ class Menus extends MY_Controller {
                         $ext = pathinfo($_FILES['menu_ar']['name'], PATHINFO_EXTENSION);
                         
                         if (!in_array($ext, array('pdf'))) {
-                            $this->session->set_flashdata('error', 'Please upload pdf file.');
-                            redirect('menus/formpdf/' . $menu_id . '?rest=' . $this->input->post('rest_ID'));
+                       
+                            returnMsg("error",'menus/formpdf/' . $menu_id . '?rest=' . $this->input->post('rest_ID'),lang('upload_pdf_file'));
                         }
-                        $menu = $this->upload_pdf('menu', $this->config->item('upload_url').'images/menuItem/');
-                        $numPages = $this->savePdfAsImage($menu, $this->config->item('upload_url').'images/menuItem/', $this->config->item('upload_url').'images/pdf/');
+                        $menu = $this->upload_pdf('menu',menu_pdf_path());
+                        $numPages = $this->savePdfAsImage($menu,menu_pdf_path(), menu_pdf_path());
                     } else {
                         $menu = $_POST['menu_old'];
                         $numPages = $_POST['pagenumber'];
@@ -535,19 +536,19 @@ class Menus extends MY_Controller {
                     if (is_uploaded_file($_FILES['menu_ar']['tmp_name'])) {
                         $ext = pathinfo($_FILES['menu_ar']['name'], PATHINFO_EXTENSION);
                         if (!in_array($ext, array('pdf'))) {
-                            $this->session->set_flashdata('error', 'Please upload pdf file.');
-                            redirect('menus/formpdf/' . $menu_id . '?rest=' . $this->input->post('rest_ID'));
+                            returnMsg("error",'menus/formpdf/' . $menu_id . '?rest=' . $this->input->post('rest_ID'),lang('upload_pdf_file'));
+
                         }
-                        $menuar = $this->upload_pdf('menu_ar', $this->config->item('upload_url').'images/menuItem/');
-                        $numPagesAr = $this->savePdfAsImage($menuar, $this->config->item('upload_url').'images/menuItem/', $this->config->item('upload_url').'images/pdf_ar/');
+                        $menuar = $this->upload_pdf('menu_ar',menu_pdf_path());
+                        $numPagesAr = $this->savePdfAsImage($menuar, menu_pdf_path(), menu_pdf_path());
                     } else {
                         $menuar = $_POST['menu_ar_old'];
                         $numPagesAr = $_POST['pagenumberAr'];
                     }
                     $this->MRestBranch->updatePDFMenu($menu, $menuar, $numPages, $numPagesAr);
                 
-                    $this->MGeneral->addActivity('A New PDF Menu is added.', $menu_id);
-                    returnMsg("success",'menus/pdf',' Pdf Menu updated successfully');
+                    $this->MGeneral->addActivity(lang('edit_pdf_menu_log'), $menu_id);
+                    returnMsg("success",'menus/pdf',lang('edit_pdf_menu_success'));
                 } else {
                     if (is_uploaded_file($_FILES['menu']['tmp_name'])) {
                         $ext = pathinfo($_FILES['menu']['name'], PATHINFO_EXTENSION);
@@ -555,27 +556,27 @@ class Menus extends MY_Controller {
                             $this->session->set_flashdata('error', 'Please upload pdf file.');
                             redirect('menus/formpdf?rest=' . $this->input->post('rest_ID'));
                         }
-                        $menu = $this->upload_pdf('menu', $this->config->item('upload_url').'images/menuItem/');
-                        $numPages = $this->savePdfAsImage($menu, $this->config->item('upload_url').'images/menuItem/', $this->config->item('upload_url').'images/pdf/');
+                        $menu = $this->upload_pdf('menu', menu_pdf_path());
+                        $numPages = $this->savePdfAsImage($menu, menu_pdf_path(), menu_pdf_path());
                     }
                     if (is_uploaded_file($_FILES['menu_ar']['tmp_name'])) {
                         $ext = pathinfo($_FILES['menu_ar']['name'], PATHINFO_EXTENSION);
                         if (!in_array($ext, array('pdf'))) {
-                            $this->session->set_flashdata('error', 'Please upload pdf file.');
-                            redirect('menus/formpdf?rest=' . $this->input->post('rest_ID'));
+                            returnMsg("error",'menus/formpdf?rest=' . $this->input->post('rest_ID'),lang('upload_pdf_file'));
+
                         }
-                        $menuar = $this->upload_pdf('menu_ar', $this->config->item('upload_url').'images/menuItem/');
-                        $numPagesAr = $this->savePdfAsImage($menuar, $this->config->item('upload_url').'images/menuItem/', $this->config->item('upload_url').'images/pdf_ar/');
+                        $menuar = $this->upload_pdf('menu_ar', menu_pdf_path());
+                        $numPagesAr = $this->savePdfAsImage($menuar,menu_pdf_path(), menu_pdf_path());
                     }
                     $menu_id = $this->MRestBranch->addPDFMenu($menu, $menuar, $numPages, $numPagesAr);
-                    $this->MGeneral->addActivity('A New PDF Menu is added.', $menu_id);
-                    returnMsg("success",'menus/pdf','Pdf Menu added successfully');
+                    $this->MGeneral->addActivity(lang('edit_pdf_menu_log'), $menu_id);
+                    returnMsg("success",'menus/pdf',lang('add_pdf_menu_success'));
 
                 }
             }
         } else {
-            //$this->session->set_flashdata('error', 'Some error happened Please try again');
-            //redirect('menus/pdf');
+      
+            returnMsg('error','menus/pdf',lang('proccess_error'));
         }
     }
 
@@ -585,7 +586,7 @@ class Menus extends MY_Controller {
         $this->MRestBranch->updateRest($rest);
         $this->MRestBranch->deleteMenuPDF($pdf);
        
-        returnMsg("success",'menus/pdf',' Pdf Menu deleted successfully');
+        returnMsg("success",'menus/pdf',lang('pdf_menu_deleted'));
 
     }
 
@@ -594,6 +595,12 @@ class Menus extends MY_Controller {
         // ======================= upload 1 ===========================
         if ($_FILES[$name]['name'] != '' && $_FILES[$name]['name'] != 'none') {
             $uploadFile_1 = uniqid('sufrati') . $_FILES[$name]['name'];
+            $rand = rand(0, 10000 - 1);
+            $date = date('YmdHis');
+            $file_name = $_FILES[$name]['name'];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $new_filename = $rand . $date . "." . $file_ext;
+            $uploadFile_1 = uniqid('sufrati').$new_filename;
             $uploadFile1 = $uploadDir . $uploadFile_1;
             if (move_uploaded_file($_FILES[$name]['tmp_name'], $uploadFile1)) {
                 //print "File is valid, and was successfully uploaded. \n\n ";

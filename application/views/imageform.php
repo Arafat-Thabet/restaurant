@@ -1,9 +1,9 @@
 <section id="top-banner">
 <ul class="breadcrumb">
 <li>
-<a href="<?php echo site_url('gallery');?>">Photos</a> <span class="divider">/</span>
+<a href="<?php echo site_url('gallery');?>"><?=lang('photos')?></a> <span class="divider">/</span>
 </li>
-<li class="active">Image </li>
+<li class="active"> <?=lang('image')?></li>
 
 </ul>
     
@@ -23,12 +23,12 @@ echo message_box('success');
 <form id="imageForm" class="form-horizontal restaurant-form" method="post" action="<?php echo site_url('gallery/save');?>" enctype="multipart/form-data">
     <fieldset>
         <div class="form-group row mb-3">
-            <label class="control-label col-md-3 col-lg-2" for="image_full">Image
-                <br />
-                <span class="small-font">Size: (200*200)</span>
+            <label class="control-label col-md-3 col-lg-2" for="image_full"><?=lang('image')?>
+              
             </label>
             <div class="col-4">
                     <input class="form-control w-auto" type="file" name="image_full" id="image_full" />
+                    <span class="help-text small-font"><?=lang('img_size')?>: (200*200)</span>
             </div>
             <div class="col-4">
 
@@ -38,7 +38,7 @@ echo message_box('success');
                     <input class="form-control" type="hidden" name="image_full_old" value="<?php echo $image['image_full'];?>"/>
                     <input class="form-control"  type="hidden" name="image_ID" value="<?php echo $image['image_ID'];?>"/>
                     <input  class="form-control" type="hidden" name="ratio_old" value="<?php echo $image['ratio'];?>"/>
-                    <img class="" src="http://uploads.azooma.co/Gallery/thumb/<?php echo $image['image_full'];?>"/>
+                    <img class="" src="<?=app_files_url()?>/Gallery/thumb/<?php echo $image['image_full'];?>"/>
                     <?php
                     }
                     if(isset($_GET['ref'])){
@@ -53,29 +53,29 @@ echo message_box('success');
             </div>
         </div>
         <div class="control-group mb-3 row">
-            <label class="control-label col-sm-2" for="title">Title</label>
+            <label class="control-label col-sm-2" for="title"><?=lang('title')?></label>
             <div class="col-sm-6">
-                <input type="text" class="required form-control" name="title" id="title" placeholder="Title" <?php echo isset($image)?'value="'.(htmlspecialchars($image['title'])).'"':""; ?> />
+                <input type="text" class="required form-control" name="title" id="title" required placeholder="<?=lang('title')?>" <?php echo isset($image)?'value="'.(htmlspecialchars($image['title'])).'"':""; ?> />
             </div>
         </div>
         
         <div class="control-group mb-3 row">
-            <label class="control-label col-sm-2" for="title_ar">Title Arabic</label>
+            <label class="control-label col-sm-2" for="title_ar"><?=lang('title_ar')?></label>
             <div class="col-sm-6">
-                <input type="text" name="title_ar" class="required form-control" id="title_ar" placeholder="Title Arabic" <?php echo isset($image)?'value="'.(htmlspecialchars($image['title_ar'])).'"':""; ?> />
+                <input type="text" name="title_ar" class="required form-control" required id="title_ar" placeholder="<?=lang('title_ar')?>" <?php echo isset($image)?'value="'.(htmlspecialchars($image['title_ar'])).'"':""; ?> />
             </div>
             
         </div>
         
         <div class="control-group mb-3 row">
-                <label class="control-label col-sm-2" for="status">Publish</label>
+                <label class="control-label col-sm-2" for="status"><?=lang('publish')?></label>
                 <input class="col-sm-1" type="checkbox" name="status" value="1" checked="checked"/>
             </div>
         
         <div class="control-group mb-3 col-8 text-end">
                 <input class="btn btn-danger" type="hidden" name="rest_ID" value="<?php echo $rest['rest_ID'];?>"/>
-                <input class="btn btn-danger" type="submit" name="submit" value="Save &amp; Upload" />
-                <a class="btn btn-light" href="<?php if(isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER']; else echo site_url('gallery');?>"  title="Cancel Changes">Cancel</a>
+                <input class="btn btn-danger" type="submit" name="submit" value="<?=lang('save_upload')?>" />
+                <a class="btn btn-light" href="<?php if(isset($_SERVER['HTTP_REFERER'])) echo $_SERVER['HTTP_REFERER']; else echo site_url('gallery');?>"  title="Cancel Changes"><?=lang('cancel')?></a>
             
         </div>
     </fieldset>

@@ -12,8 +12,8 @@
 <link rel="stylesheet" type="text/css" href="<?=base_url(css_path())?>mapsjs-ui.css">
 <div class="p-2">
     <ul class="breadcrumb">
-        <li class="breadcrumb-item"> <a href="<?php echo base_url(); ?>"><?= lang('home') ?></a> <span class="divider">/</span> </li>
-        <li class="breadcrumb-item"> <a href="<?php echo base_url('branches'); ?>"><?= lang('rest_barnch') ?></a> <span class="divider">/</span> </li>
+        <li class="breadcrumb-item"> <a href="<?php echo base_url(); ?>"><?= lang('Dashboard') ?></a> <span class="divider">/</span> </li>
+        <li class="breadcrumb-item"> <a href="<?php echo base_url('branches'); ?>"><?= lang('branches_locations') ?></a> <span class="divider">/</span> </li>
         <li class="active"><?php echo $title; ?> </li>
     </ul>
 </div>

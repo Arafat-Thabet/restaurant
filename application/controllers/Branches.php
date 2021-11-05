@@ -3,24 +3,26 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Branches extends MY_Controller {
+class Branches extends MY_Controller
+{
 
     public $data;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
-        $this->load->model('Mgeneral',"MGeneral");
-        $this->load->model('Mbooking',"MBooking");
-        $this->load->model('Mrestbranch',"MRestBranch");
+        $this->load->model('Mgeneral', "MGeneral");
+        $this->load->model('Mbooking', "MBooking");
+        $this->load->model('Mrestbranch', "MRestBranch");
         $this->load->library('pagination');
         $this->load->library('images');
-        //$this->output->enable_profiler(true);
         if ($this->session->userdata('restuser') == '') {
             redirect('home/login');
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $city = "";
         $limit = 20;
         if (isset($_GET['city']) && ($_GET['city'] != "")) {
@@ -46,12 +48,13 @@ class Branches extends MY_Controller {
 
         $data['restid'] = $restid;
         $data['title'] = (htmlspecialchars($restdata['rest_Name'])) . " - " . $settings['name'];
-        $data['side_menu'] = array("branches","index");
+        $data['side_menu'] = array("branches", "index");
         $data['main'] = 'branches';
         $this->layout->view('branches', $data);
     }
 
-    public function branch($cityid) {
+    public function branch($cityid)
+    {
         $city = "";
         $limit = 20;
         if (isset($cityid) && ($cityid != "")) {
@@ -80,11 +83,12 @@ class Branches extends MY_Controller {
         $data['restid'] = $restid;
         $data['title'] = (htmlspecialchars($restdata['rest_Name'])) . " - " . $settings['name'];
         $data['main'] = 'branch';
-        $data['side_menu'] = array("branches","branch");
+        $data['side_menu'] = array("branches", "branch");
         $this->layout->view('branch', $data);
     }
 
-    function from($rest_id, $br_id = 0) {
+    function from($rest_id, $br_id = 0)
+    {
         $restid = $this->session->userdata('rest_id');
         $uuserid = $this->session->userdata('id_user');
         $country = 0;
@@ -106,12 +110,13 @@ class Branches extends MY_Controller {
 
         $data['js'] = 'branchform,validate';
         $data['css'] = 'admin,docs';
-        $data['side_menu'] = array("branches","add_new_branch");
+        $data['side_menu'] = array("branches", "add_new_branch");
         $this->layout->view('branchform', $data);
     }
 
-    function save() {
-        $msg='';
+    function save()
+    {
+        $msg = '';
         if ($this->input->post('city_ID')) {
             $city_ID = $this->input->post('city_ID');
             $rest = $this->input->post('rest_fk_id');
@@ -126,16 +131,16 @@ class Branches extends MY_Controller {
                     }
                 }
                 $this->MRestBranch->updateRest($rest);
-                $msg= 'Branch updated successfully';
+                $msg = lang('branch_updated');
 
-                $this->MGeneral->addActivity('We have changed our branch info.', $branch);
+                $this->MGeneral->addActivity(lang('branch_updated_log'), $branch);
             } else {
                 $branch = $this->MRestBranch->addBranch();
                 if ($this->input->post('branch_type') == "Hotel Restaurant") {
                     $this->MRestActions->addBranchHotel($branch);
                 }
-                $msg= 'Branch added successfully';
-                $this->MGeneral->addActivity('We have opened our new branch.', $branch);
+                $msg =lang('branch_added');
+                $this->MGeneral->addActivity(lang('branch_added_log'), $branch);
                 $this->MRestBranch->updateRest($rest);
             }
             $firstTimeLogin = $this->session->userdata('firstTimeLogin');
@@ -146,16 +151,17 @@ class Branches extends MY_Controller {
                 $profilecompletionstatus = $this->MGeneral->getProfileCompletionStatus($restid, $uuserid);
                 if ($profilecompletionstatus['profilecompletion'] == 1) {
                     $this->MGeneral->updateProfileCompletionStatus($restid, $uuserid, 2);
-                  
+
                     redirect();
                 }
             }
-            returnMsg("success","branches/branch/" . $city_ID,$msg);
+            returnMsg("success", "branches/branch/" . $city_ID, $msg);
             redirect("branches/branch/" . $city_ID);
         }
     }
 
-    function photofrom($image_id = 0) {
+    function photofrom($image_id = 0)
+    {
         $restid = $this->session->userdata('rest_id');
         $uuserid = $this->session->userdata('id_user');
         $permissions = $this->MBooking->restPermissions($restid);
@@ -167,9 +173,9 @@ class Branches extends MY_Controller {
         $data['cities'] = $this->MGeneral->getAllCity(1);
         $data['main'] = 'branchphotoform';
         $data['hotels'] = $this->MRestBranch->getAllHotels(1);
-        if ($permissions['accountType'] == 1) {
-            $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-            redirect('accounts');
+        if ($permissions['accountType'] == 0) {
+            returnMsg("success",'accounts',lang('account_paln_msg'));
+
         }
         $data['branches'] = $this->MRestBranch->getAllBranches($restid);
         if ($image_id == 0) {
@@ -181,12 +187,13 @@ class Branches extends MY_Controller {
 
         $data['js'] = 'branchform,validate';
         $data['css'] = 'admin,docs';
-        $data['side_menu'] = array("branches","add_new_branch_photo");
+        $data['side_menu'] = array("branches", "add_new_branch_photo");
 
         $this->layout->view('branchphotoform', $data);
     }
 
-    function savebranchimage() {
+    function savebranchimage()
+    {
         $rest = $this->input->post('rest_fk_id');
         if ($this->input->post('br_id') && $this->input->post('br_id') != "") {
             $br_id = $this->input->post('br_id');
@@ -194,12 +201,13 @@ class Branches extends MY_Controller {
             $image = "";
             $title = $title_ar = "";
             $ratio = $width = 0;
+            $msg='';
             if (is_uploaded_file($_FILES['branch_image']['tmp_name'])) {
                 $image = $this->MGeneral->uploadImage('branch_image', $this->config->item('upload_url') . 'Gallery/');
                 list($width, $height, $type, $attr) = getimagesize($this->config->item('upload_url') . 'Gallery/' . $image);
                 if ($width < 200 && $height < 200) {
-                    $this->session->set_flashdata('error', 'Image is very small. Please upload image which must be bigger than 200*200 width and height.');
-                    redirect("branches/photofrom/" . $rest);
+
+                    returnMsg("error","branches/photofrom/" . $rest,lang('img_upload_size_error'));
                 }
                 if (($width > 800) || ($height > 500)) {
                     $this->images->resize($this->config->item('upload_url') . 'Gallery/' . $image, 800, 500, $this->config->item('upload_url') . 'Gallery/' . $image);
@@ -216,6 +224,7 @@ class Branches extends MY_Controller {
                 $config['wm_vrt_alignment'] = 'bottom';
                 $config['wm_hor_alignment'] = 'right';
                 $config['wm_padding'] = '-10';
+                $config['image_library'] = 'GD2';
                 $this->image_lib->initialize($config);
                 //$this->image_lib->watermark();
                 //$this->image_lib->clear();
@@ -249,27 +258,28 @@ class Branches extends MY_Controller {
                 $image_ID = $this->input->post('image_ID');
                 $this->MRestBranch->updateBranchImage($image_ID, $image, $title, $title_ar, $ratio, $width);
                 $this->MRestBranch->updateRest($rest);
-                $this->session->set_flashdata('message', 'Branch Image updated Successfully');
+                $msg=lang('branch_img_updated');
             } else {
                 $this->MRestBranch->addBranchImage($image, $title, $title_ar, $ratio, $width);
                 $this->MRestBranch->updateRest($rest);
-                $this->session->set_flashdata('message', 'Branch Image uploaded Successfully');
+                $msg=lang('branch_img_upladed');
             }
-            redirect("branches/photos/" . $br_id . "/" . $rest);
+           
+            returnMsg("success","branches/photos/" . $br_id . "/" . $rest,$msg);
         } elseif (empty($br_id)) {
-            
         }
     }
 
-    function photos($br_id = 0, $rest_id) {
+    function photos($br_id = 0, $rest_id)
+    {
         $restid = $this->session->userdata('rest_id');
         $uuserid = $this->session->userdata('id_user');
 
         $permissions = $this->MBooking->restPermissions($restid);
         $permissions_sub_detail = explode(',', $permissions['sub_detail']);
-        if ($permissions['accountType'] == 0) {
-            $this->session->set_flashdata('error', 'Your current package does not have this service. Please upgrade your package.');
-            redirect('accounts');
+        if ($permissions['accountType'] == 1) {
+
+            returnMsg("success",'accounts',lang('account_paln_msg'));
         }
         $data['settings'] = $settings = $this->MGeneral->getSettings();
         $data['sitename'] = $this->MGeneral->getSiteName();
@@ -281,55 +291,56 @@ class Branches extends MY_Controller {
         $data['main'] = 'branchImages';
         $data['js'] = 'branchform,validate';
         $data['css'] = 'admin,docs';
-        $data['side_menu'] = array("branches","branchImages");
+        $data['side_menu'] = array("branches", "branchImages");
 
         $this->layout->view('branchImages', $data);
     }
 
-    function usergallerystatus($id = 0) {
+    function usergallerystatus($id = 0)
+    {
         if (isset($_GET['id']) && ($_GET['id'] != "")) {
             $id = $_GET['id'];
         }
+        $msg = '';
         $photo = $this->MRestBranch->getUserGalleryImage($id);
         if ($photo['status'] == 1) {
             $this->MRestBranch->deActivateUserGalleryImage($id);
-            $this->session->set_flashdata('message', 'Image Deactivated successfully');
+            $msg = lang('img_deactive_message');
         } else {
             $this->MRestBranch->activateUserGalleryImage($id);
             if (($photo['user_ID'] != "") && ($photo['user_ID'] != 0)) {
                 $this->MRestBranch->addNotification($photo['user_ID'], $id, 'Photo approved', 'وافق الصورة');
             }
-            $this->session->set_flashdata('message', 'Image Activated successfully');
+            $msg = lang('img_active_message');
         }
         if (isset($_GET['rest']) && !empty($_GET['rest'])) {
             $this->MRestBranch->updateRest($_GET['rest']);
         }
-        redirect("branches/photos/" . $_GET['br_id'] . "/" . $_GET['rest']);
+        returnMsg("success", "branches/photos/" . $_GET['br_id'] . "/" . $_GET['rest'], $msg);
     }
 
-    function usergallerydelete($id = 0) {
+    function usergallerydelete($id = 0)
+    {
         if (isset($_GET['id']) && ($_GET['id'] != "")) {
             $id = $_GET['id'];
         }
         $this->MRestBranch->deleteUserGalleryImage($id);
-        $this->session->set_flashdata('message', 'Image deleted successfully');
+
         if (isset($_GET['rest']) && !empty($_GET['rest'])) {
             $this->MRestBranch->updateRest($_GET['rest']);
         }
-        redirect("branches/photos/" . $_GET['br_id'] . "/" . $_GET['rest']);
+        returnMsg("success", "branches/photos/" . $_GET['br_id'] . "/" . $_GET['rest'], lang("delete_success"));
     }
-       public function delete_branch($id,$city_id) {
-           $data['status']=0;
-           $where['br_id']=intval($id);
-          
-           $saved=Smart::update("rest_branches",$data,$where);
-                if($saved){
-                    returnMsg("success","branches/branch/$city_id",lang("delete_success"));
-                }
-                else{
-                    returnMsg("error","branches/branch/$city_id",lang("delete_error"));
+    public function delete_branch($id, $city_id)
+    {
+        $data['status'] = 0;
+        $where['br_id'] = intval($id);
 
-                }
-
-       }
+        $saved = Smart::update("rest_branches", $data, $where);
+        if ($saved) {
+            returnMsg("success", "branches/branch/$city_id", lang("delete_success"));
+        } else {
+            returnMsg("error", "branches/branch/$city_id", lang("delete_error"));
+        }
+    }
 }

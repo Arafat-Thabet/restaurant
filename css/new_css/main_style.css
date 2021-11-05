@@ -76,3 +76,29 @@ text.highcharts-credits {
 .custom-card .card-footer>div h6 {
     font-size: 12px;
 }
+
+.dark-only .text-dark {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.rtl {
+    direction: rtl;
+}
+
+.translate_wrapper.active .more_lang .lang {
+    width: 130px;
+}
+
+.lang .flag-icon,
+.lang-txt {
+    font-size: 13px;
+}
+
+.select2-container--default .select2-selection--multiple {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.rtl .pull-start {
+    float: right !important;
+}

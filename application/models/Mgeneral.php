@@ -3,20 +3,24 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class MGeneral extends CI_Model {
+class MGeneral extends CI_Model
+{
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
     }
 
-    function getSettings() {
+    function getSettings()
+    {
         $q = $this->db->get('settings');
         if ($q->num_rows() > 0) {
             return $q->row_Array();
         }
     }
 
-    function getSiteName($lang = 'en') {
+    function getSiteName($lang = 'en')
+    {
         $this->db->select('name,nameAr');
         $q = $this->db->get('settings');
         if ($q->num_rows() > 0) {
@@ -29,7 +33,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getLogo() {
+    function getLogo()
+    {
         $this->db->where('art_work_name', 'Sufrati Logo')->where('active', 1);
         $q = $this->db->get('art_work');
         if ($q->num_rows() > 0) {
@@ -37,7 +42,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    public function memberinfo($name) {
+    public function memberinfo($name)
+    {
         $this->db->select('booking_management.id_user,booking_management.full_name,booking_management.email,booking_management.rest_id,booking_management.user_name,booking_management.phone,booking_management.password,restaurant_info.rest_Subscription,restaurant_info.member_duration,restaurant_info.rest_Name,restaurant_info.your_Name,restaurant_info.your_Position,restaurant_info.rest_Name_Ar');
         $this->db->join('restaurant_info', 'restaurant_info.rest_ID=booking_management.rest_id');
         $this->db->where(array('booking_management.user_name' => $name));
@@ -49,14 +55,16 @@ class MGeneral extends CI_Model {
         return $results;
     }
 
-    public function accountDuration($id) {
+    public function accountDuration($id)
+    {
         $this->db->where('rest_ID', $id);
         $query = $this->db->get('subscription');
         $row = $query->row_array();
         return $row;
     }
 
-    public function firstLogin($userid) {
+    public function firstLogin($userid)
+    {
         $this->db->select("COUNT(id_user) AS userid");
         $this->db->from('clientlogging');
         $this->db->where('id_user', $userid);
@@ -69,7 +77,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    public function insertlogin($id) {
+    public function insertlogin($id)
+    {
         $this->db_array = "";
         date_default_timezone_set('Asia/Riyadh');
         $this->db_array['id_user'] = $id;
@@ -82,7 +91,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    public function updateAccount($restid) {
+    public function updateAccount($restid)
+    {
         $data = "";
         $data['date_upd'] = Date('Y-m-n h:m:s');
         $data['sub_detail'] = "1,2,3,6";
@@ -92,7 +102,8 @@ class MGeneral extends CI_Model {
         $true = $this->db->update('subscription', $data);
     }
 
-    public function updateDuration($restid) {
+    public function updateDuration($restid)
+    {
         $data = "";
         $data['rest_Subscription'] = 0; //Free Subscription
         $data['member_duration'] = 0;
@@ -101,7 +112,8 @@ class MGeneral extends CI_Model {
         $true = $this->db->update('restaurant_info', $data);
     }
 
-    public function getRest($id = 0, $min = false, $fav = false) {
+    public function getRest($id = 0, $min = false, $fav = false)
+    {
         if ($min == TRUE) {
             $this->db->select('rest_ID,rest_Name,rest_Name_Ar,rest_Logo,seo_url');
         }
@@ -116,7 +128,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    public function getLastLogin($id) {
+    public function getLastLogin($id)
+    {
         $this->db->select('lastlogin');
         $this->db->where('id_user', $id);
         $this->db->order_by('lastlogin', 'DESC');
@@ -128,7 +141,8 @@ class MGeneral extends CI_Model {
         return $results['lastlogin'];
     }
 
-    function getRestaurantCuisines($rest = 0, $limit = "", $name = 0, $lang = "en") {
+    function getRestaurantCuisines($rest = 0, $limit = "", $name = 0, $lang = "en")
+    {
         $this->db->distinct();
         if ($name == 0) {
             $this->db->select('cuisine_list.*');
@@ -151,12 +165,12 @@ class MGeneral extends CI_Model {
                 foreach ($q->result_Array() as $row) {
                     $i++;
                     if ($lang == "en") {
-                        $cuisine.=$row['cuisine_Name'];
+                        $cuisine .= $row['cuisine_Name'];
                     } else {
-                        $cuisine.=$row['cuisine_Name_Ar'];
+                        $cuisine .= $row['cuisine_Name_Ar'];
                     }
                     if ($i != $q->num_rows()) {
-                        $cuisine.=", ";
+                        $cuisine .= ", ";
                     }
                 }
                 return $cuisine;
@@ -164,7 +178,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getRestaurantBestFors($rest = 0, $limit = "", $name = 0, $lang = "en") {
+    function getRestaurantBestFors($rest = 0, $limit = "", $name = 0, $lang = "en")
+    {
         $this->db->distinct();
         if ($name == 0) {
             $this->db->select('bestfor_list.*');
@@ -187,12 +202,12 @@ class MGeneral extends CI_Model {
                 foreach ($q->result_Array() as $row) {
                     $i++;
                     if ($lang == "en") {
-                        $bestfor.=$row['bestfor_Name'];
+                        $bestfor .= $row['bestfor_Name'];
                     } else {
-                        $bestfor.=$row['bestfor_Name_Ar'];
+                        $bestfor .= $row['bestfor_Name_Ar'];
                     }
                     if ($i != $q->num_rows()) {
-                        $bestfor.=", ";
+                        $bestfor .= ", ";
                     }
                 }
                 return $bestfor;
@@ -200,7 +215,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getAllBestFor($status = 0, $city = 0) {
+    function getAllBestFor($status = 0, $city = 0)
+    {
         if ($status == 1) {
             $this->db->where('bestfor_Status', 1);
         }
@@ -218,7 +234,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getAllCuisine($status = 0, $city = 0) {
+    function getAllCuisine($status = 0, $city = 0)
+    {
         $this->db->select('cuisine_list.cuisine_Name,cuisine_list.cuisine_Name_ar,cuisine_list.seo_url,cuisine_list.cuisine_ID');
         if ($status == 1) {
             $this->db->where('cuisine_Status', 1);
@@ -237,7 +254,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function addActivity($activity, $activity_id = 0) {
+    function addActivity($activity, $activity_id = 0)
+    {
         $data = array();
         $data['id_user'] = $this->session->userdata('id_user');
         $data['rest_ID'] = $this->session->userdata('rest_id');
@@ -247,7 +265,8 @@ class MGeneral extends CI_Model {
         $this->db->insert('rest_activity', $data);
     }
 
-    function getCity($city = 0) {
+    function getCity($city = 0)
+    {
         $this->db->where('city_ID', $city);
         $q = $this->db->get('city_list');
         if ($q->num_rows() > 0) {
@@ -255,11 +274,12 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getAllCity($status = 0, $country = 0) {
+    function getAllCity($status = 0, $country = 0)
+    {
         if ($status == 1) {
             $this->db->where('city_Status', 1);
         }
-        
+
         if (!empty($country)) {
             $this->db->where('country', $country);
         }
@@ -270,7 +290,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getCityDistricts($city = 0, $status = "") {
+    function getCityDistricts($city = 0, $status = "")
+    {
         if ($city != 0) {
             $this->db->where('city_ID', $city);
         }
@@ -284,11 +305,18 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function uploadImage($name, $directory) {
+    function uploadImage($name, $directory)
+    {
         $uploadDir = $directory;
         if ($_FILES[$name]['name'] != '' && $_FILES[$name]['name'] != 'none') {
             $file = str_replace(' ', '_', $_FILES[$name]['name']);
-            $uploadFile_1 = uniqid('sufrati') . $file;
+
+            $rand = rand(0, 10000 - 1);
+            $date = date('YmdHis');
+            $file_name = $_FILES[$name]['name'];
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $new_filename = $rand . $date . "." . $file_ext;
+            $uploadFile_1 = uniqid('sufrati') . $new_filename;
             $uploadFile1 = $uploadDir . $uploadFile_1;
             if (move_uploaded_file($_FILES[$name]['tmp_name'], $uploadFile1)) {
                 // successfully uploaded"
@@ -300,7 +328,8 @@ class MGeneral extends CI_Model {
             return null;
     }
 
-    function ago($datefrom = 0, $dateto = -1) {
+    function ago($datefrom = 0, $dateto = -1)
+    {
         if ($datefrom == 0) {
             return "A long time ago";
         }
@@ -314,23 +343,23 @@ class MGeneral extends CI_Model {
         $difference = $dateto - $datefrom;
         // Based on the interval,Find the difference
         switch (true) {
-            // Seconds
-            case(strtotime('-1 min', $dateto) < $datefrom):
+                // Seconds
+            case (strtotime('-1 min', $dateto) < $datefrom):
                 $datediff = $difference;
                 $res = ($datediff == 1) ? $datediff . ' second ago' : $datediff . ' seconds ago';
                 break;
-            // Minutes
-            case(strtotime('-1 hour', $dateto) < $datefrom):
+                // Minutes
+            case (strtotime('-1 hour', $dateto) < $datefrom):
                 $datediff = floor($difference / 60);
                 $res = ($datediff == 1) ? $datediff . ' minute ago' : $datediff . ' minutes ago';
                 break;
-            // Hours
-            case(strtotime('-1 day', $dateto) < $datefrom):
+                // Hours
+            case (strtotime('-1 day', $dateto) < $datefrom):
                 $datediff = floor($difference / 60 / 60);
                 $res = ($datediff == 1) ? $datediff . ' hour ago' : $datediff . ' hours ago';
                 break;
-            // Days
-            case(strtotime('-1 week', $dateto) < $datefrom):
+                // Days
+            case (strtotime('-1 week', $dateto) < $datefrom):
                 $day_difference = 1;
                 while (strtotime('-' . $day_difference . ' day', $dateto) >= $datefrom) {
                     $day_difference++;
@@ -338,8 +367,8 @@ class MGeneral extends CI_Model {
                 $datediff = $day_difference;
                 $res = ($datediff == 1) ? 'yesterday' : $datediff . ' days ago';
                 break;
-            // Weeks      
-            case(strtotime('-1 month', $dateto) < $datefrom):
+                // Weeks      
+            case (strtotime('-1 month', $dateto) < $datefrom):
                 $week_difference = 1;
                 while (strtotime('-' . $week_difference . ' week', $dateto) >= $datefrom) {
                     $week_difference++;
@@ -347,8 +376,8 @@ class MGeneral extends CI_Model {
                 $datediff = $week_difference;
                 $res = ($datediff == 1) ? 'last week' : $datediff . ' weeks ago';
                 break;
-            // Months
-            case(strtotime('-1 year', $dateto) < $datefrom):
+                // Months
+            case (strtotime('-1 year', $dateto) < $datefrom):
                 $months_difference = 1;
                 while (strtotime('-' . $months_difference . ' month', $dateto) >= $datefrom) {
                     $months_difference++;
@@ -356,8 +385,8 @@ class MGeneral extends CI_Model {
                 $datediff = $months_difference;
                 $res = ($datediff == 1) ? $datediff . ' month ago' : $datediff . ' months ago';
                 break;
-            // Years
-            case(strtotime('-1 year', $dateto) >= $datefrom):
+                // Years
+            case (strtotime('-1 year', $dateto) >= $datefrom):
                 $year_difference = 1;
                 while (strtotime('-' . $year_difference . ' year', $dateto) >= $datefrom) {
                     $year_difference++;
@@ -369,7 +398,8 @@ class MGeneral extends CI_Model {
         return $res;
     }
 
-    function addUserActivity($user, $rest, $activity, $activityAr, $activityID) {
+    function addUserActivity($user, $rest, $activity, $activityAr, $activityID)
+    {
         $data = array(
             'user_ID' => $user,
             'rest_ID' => $rest,
@@ -381,7 +411,8 @@ class MGeneral extends CI_Model {
         return $this->db->insert_id();
     }
 
-    function getAllUsersCommentedOnRest($user_ID, $rest_ID) {
+    function getAllUsersCommentedOnRest($user_ID, $rest_ID)
+    {
         $this->db->where('rest_ID', $rest_ID);
         $this->db->where('review_Status', 1);
         $this->db->where('user_ID != ', $user_ID);
@@ -391,7 +422,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function checkNotificationStatus($user) {
+    function checkNotificationStatus($user)
+    {
         //$userdb = $this->load->database('user', TRUE);  
         $this->db->where('user_ID', $user);
         $q = $this->db->get('notifications');
@@ -405,7 +437,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    public function getAdminDetails($email, $restid) {
+    public function getAdminDetails($email, $restid)
+    {
         $this->db->select('booking_management.id_user,booking_management.user_name,booking_management.password,booking_management.full_name,booking_management.email,restaurant_info.rest_Name');
         $this->db->join('restaurant_info', 'restaurant_info.rest_ID=booking_management.rest_id');
         $this->db->where('restaurant_info.rest_ID', $restid);
@@ -416,7 +449,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    public function getRestByName($restName) {
+    public function getRestByName($restName)
+    {
         $this->db->like('rest_Name', $restName, 'both');
         $q = $this->db->get('restaurant_info');
         if ($q->num_rows() > 0) {
@@ -424,14 +458,16 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function getRestType($id) {
+    function getRestType($id)
+    {
         $this->db->where('id', $id);
         $query = $this->db->get('rest_type');
         $results = $query->row_array();
         return $results;
     }
 
-    function convertToArabic($var) {
+    function convertToArabic($var)
+    {
         $digit = (string) $var;
         if (empty($digit))
             return '.';
@@ -442,12 +478,13 @@ class MGeneral extends CI_Model {
             if (isset($ar_digit[$digit[$i]]))
                 $arabic_digit .= $ar_digit[$digit[$i]];
             else
-                $arabic_digit .=$digit[$i];
+                $arabic_digit .= $digit[$i];
         }
         return $arabic_digit;
     }
 
-    function readUserComment($id = 0) {
+    function readUserComment($id = 0)
+    {
         $data = array(
             'is_read' => 1
         );
@@ -455,7 +492,8 @@ class MGeneral extends CI_Model {
         $this->db->update('review', $data);
     }
 
-    function readUserPhoto($id = 0) {
+    function readUserPhoto($id = 0)
+    {
         $data = array(
             'is_read' => 1
         );
@@ -463,7 +501,8 @@ class MGeneral extends CI_Model {
         $this->db->update('image_gallery', $data);
     }
 
-    function readUserRating($id = 0) {
+    function readUserRating($id = 0)
+    {
         $data = array(
             'is_read' => 1
         );
@@ -471,7 +510,8 @@ class MGeneral extends CI_Model {
         $this->db->update('rating_info', $data);
     }
 
-    public function getProfileCompletionStatus($restid, $user_id) {
+    public function getProfileCompletionStatus($restid, $user_id)
+    {
         $this->db->select('booking_management.id_user,booking_management.profilecompletion');
         $this->db->where('booking_management.rest_ID', $restid);
         $this->db->where('booking_management.id_user', $user_id);
@@ -481,7 +521,8 @@ class MGeneral extends CI_Model {
         }
     }
 
-    function updateProfileCompletionStatus($restid, $user_id, $status = 0) {
+    function updateProfileCompletionStatus($restid, $user_id, $status = 0)
+    {
         $data = array(
             'profilecompletion' => $status
         );
@@ -490,14 +531,16 @@ class MGeneral extends CI_Model {
         $this->db->update('booking_management', $data);
     }
 
-    public function getRestPermissions($id) {
+    public function getRestPermissions($id)
+    {
         $this->db->where('rest_ID', $id);
         $query = $this->db->get('subscription');
         $row = $query->row_array();
         return $row;
     }
 
-    function addMemberDeatilsLog($rest_ID) {
+    function addMemberDeatilsLog($rest_ID)
+    {
         //$rest_ID=$this->input->post('rest_ID');
         $this->db->where('rest_ID', $rest_ID);
         $q = $this->db->get('subscription');
@@ -520,8 +563,9 @@ class MGeneral extends CI_Model {
             $this->db->insert('subscription_log', $logdata);
         }
     }
-    
-    public function getRestaurantCityURL($rest_ID=0) {
+
+    public function getRestaurantCityURL($rest_ID = 0)
+    {
         $this->db->select('city_list.seo_url');
         $this->db->join('rest_branches', 'restaurant_info.rest_ID=rest_branches.rest_fk_id');
         $this->db->join('city_list', 'city_list.city_ID=rest_branches.city_ID');
@@ -533,5 +577,4 @@ class MGeneral extends CI_Model {
         }
         return $results;
     }
-
 }
