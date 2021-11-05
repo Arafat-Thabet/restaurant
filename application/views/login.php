@@ -36,6 +36,8 @@
         @media (min-width: 768px) {
             .login {
                 height:100vh;
+                padding-right: 7%;
+                padding-left: 7%;
             }
         }
 
@@ -45,7 +47,7 @@
 
         @media (max-width: 767.98px) {
             .image-cover {
-                display: none;
+                display: none !important;
             }
             .article-box{
                 font-size: 10px !important;
@@ -80,6 +82,8 @@
     <style>
         body{text-align: right;
         }
+        .form-check{direction: rtl;}
+        .form-check-input{direction: rtl;margin-right: -1.25rem; margin-left: unset;}
         .pull-end{float: left;}
         .pull-start{float: right;}
     </style>
